@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Samuel Egwu — Portfolio</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="#" class="logo">SE</a>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="container">
+      <h1>Samuel Egwu</h1>
+      <p class="subtitle">Data Scientist · Machine Learning Engineer · One Health Researcher</p>
+      <p class="tagline">Building ML-driven systems at the intersection of human, animal, and environmental health.</p>
+      <div class="hero-cta">
+        <a href="#projects" class="btn btn-primary">View Projects</a>
+        <a href="https://github.com/EgwuSamuel" class="btn btn-outline" target="_blank">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- About -->
+  <section id="about" class="section">
+    <div class="container">
+      <h2>About Me</h2>
+      <p>I'm a data scientist and machine learning researcher focused on applying computational methods to complex public health challenges. My work bridges mechanistic disease modeling, Bayesian statistics, and multi-objective optimization to deliver actionable policy insights for zoonotic disease management across Africa.</p>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects" class="section section-alt">
+    <div class="container">
+      <h2>Featured Project</h2>
+      <div class="project-card">
+        <div class="project-content">
+          <h3>AIA4OneHealth</h3>
+          <p class="project-tag">Machine Learning · Bayesian Modeling · Multi-Objective Optimization</p>
+          <p>An end-to-end machine learning pipeline that couples a Bayesian-calibrated mechanistic Mpox model with an ML emulator ensemble and NSGA-II multi-objective optimization to recommend One Health policy packages for Nigeria and the Democratic Republic of the Congo (DRC).</p>
+          <ul class="project-details">
+            <li><strong>Mechanistic modeling:</strong> Coupled human–rodent SEIR-V ODE model</li>
+            <li><strong>Bayesian calibration:</strong> MCMC with negative-binomial likelihood and posterior predictive checks</li>
+            <li><strong>ML emulators:</strong> 5-model ensemble (GP-Matérn, GP-RBF, Random Forest, XGBoost, Neural Net)</li>
+            <li><strong>Optimization:</strong> NSGA-II 3-objective Pareto front (cases × cost × cross-domain equity)</li>
+            <li><strong>Forecasting:</strong> XGBoost lag-feature next-week case forecaster</li>
+            <li><strong>Sensitivity analysis:</strong> Sobol' total-effect indices over One Health levers</li>
+          </ul>
+          <a href="https://github.com/EgwuSamuel/AIA4OneHealthMain" class="btn btn-primary" target="_blank">View on GitHub</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section id="skills" class="section">
+    <div class="container">
+      <h2>Skills & Tools</h2>
+      <div class="skills-grid">
+        <div class="skill-category">
+          <h3>Languages</h3>
+          <ul>
+            <li>Python</li>
+            <li>R</li>
+            <li>SQL</li>
+          </ul>
+        </div>
+        <div class="skill-category">
+          <h3>ML & Statistics</h3>
+          <ul>
+            <li>Scikit-learn</li>
+            <li>XGBoost</li>
+            <li>Gaussian Processes</li>
+            <li>Neural Networks</li>
+            <li>Bayesian Inference (MCMC)</li>
+            <li>Sobol' Sensitivity Analysis</li>
+          </ul>
+        </div>
+        <div class="skill-category">
+          <h3>Optimization & Modeling</h3>
+          <ul>
+            <li>NSGA-II (Multi-Objective)</li>
+            <li>ODE Compartmental Models</li>
+            <li>Mechanistic Disease Modeling</li>
+          </ul>
+        </div>
+        <div class="skill-category">
+          <h3>Data & Visualization</h3>
+          <ul>
+            <li>Pandas · NumPy · SciPy</li>
+            <li>Matplotlib · Seaborn</li>
+            <li>Jupyter Notebooks</li>
+            <li>Geospatial Analysis</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="section section-alt">
+    <div class="container">
+      <h2>Get in Touch</h2>
+      <p>Interested in collaboration or want to learn more about my work?</p>
+      <div class="contact-links">
+        <a href="https://github.com/EgwuSamuel" class="contact-item" target="_blank">
+          <span class="contact-icon">&#9906;</span>
+          <span>GitHub</span>
+        </a>
+        <a href="https://linkedin.com/in/egwusamuel" class="contact-item" target="_blank">
+          <span class="contact-icon">&#9993;</span>
+          <span>LinkedIn</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 Samuel Egwu. All rights reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
