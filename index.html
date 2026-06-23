@@ -3,23 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Samuel Egwu — Portfolio</title>
+  <title>Samuel Onuche-Ojo Egwu — Academic Portfolio</title>
+  <meta name="description" content="Samuel Onuche-Ojo Egwu — Medical Imaging, Computer Vision & Machine Learning Researcher. MSc Computer Science, Veritas University. AI4OneHealth contributor.">
   <link rel="stylesheet" href="style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
   <!-- Navigation -->
   <nav class="navbar">
     <div class="container">
-      <a href="#" class="logo">SE</a>
+      <a href="index.html" class="logo">S.O. Egwu</a>
       <ul class="nav-links">
-        <li><a href="#about">About</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#skills">Skills</a></li>
-        <li><a href="#contact">Contact</a></li>
+        <li><a href="#about" class="nav-active">About</a></li>
+        <li><a href="#education">Education</a></li>
+        <li><a href="#research">Research</a></li>
+        <li><a href="#publications">Publications</a></li>
+        <li><a href="#awards">Awards</a></li>
+        <li><a href="blog.html">Blog</a></li>
       </ul>
     </div>
   </nav>
@@ -27,86 +27,292 @@
   <!-- Hero -->
   <header class="hero">
     <div class="container">
-      <h1>Samuel Egwu</h1>
-      <p class="subtitle">Data Scientist · Machine Learning Engineer · One Health Researcher</p>
-      <p class="tagline">Building ML-driven systems at the intersection of human, animal, and environmental health.</p>
+      <img src="Sam_Egwu-Profile.png" alt="Samuel Onuche-Ojo Egwu" class="hero-profile" width="140" height="140">
+      <h1>Samuel Onuche-Ojo Egwu</h1>
+      <p class="hero-subtitle">Medical Imaging &bull; Computer Vision &bull; Machine Learning</p>
+      <p class="hero-tagline">Bridging AI and public health through rigorous research in disease detection, deep learning, and One Health surveillance systems.</p>
+      <div class="hero-links">
+        <a href="mailto:egwusamuel17@gmail.com" class="hero-link" title="Email">&#9993; Email</a>
+        <a href="https://linkedin.com/in/egwusamuel" class="hero-link" target="_blank" rel="noopener">&#9757; LinkedIn</a>
+        <a href="https://github.com/EgwuSamuel" class="hero-link" target="_blank" rel="noopener">&#9906; GitHub</a>
+        <a href="https://scholar.google.com/citations?user=YOUR_ID" class="hero-link" target="_blank" rel="noopener">&#9733; Scholar</a>
+      </div>
       <div class="hero-cta">
-        <a href="#projects" class="btn btn-primary">View Projects</a>
-        <a href="https://github.com/EgwuSamuel" class="btn btn-outline" target="_blank">GitHub</a>
+        <a href="#publications" class="btn btn-primary">View Publications</a>
+        <a href="blog.html" class="btn btn-outline">Read Blog</a>
       </div>
     </div>
   </header>
 
   <!-- About -->
   <section id="about" class="section">
-    <div class="container">
+    <div class="section-header">
       <h2>About Me</h2>
-      <p>I'm a data scientist and machine learning researcher focused on applying computational methods to complex public health challenges. My work bridges mechanistic disease modeling, Bayesian statistics, and multi-objective optimization to deliver actionable policy insights for zoonotic disease management across Africa.</p>
+      <span class="section-rule"></span>
+      <p>Researcher & Educator at the Intersection of AI and Public Health</p>
+    </div>
+    <div class="about-content">
+      <p>I am a computer scientist and machine learning researcher dedicated to applying computational methods to pressing public health challenges. My work spans medical imaging—developing deep learning models for malaria and maize disease detection—and One Health surveillance, where I contribute to AI-driven systems for managing zoonotic diseases like Mpox. I serve as an Assistant Lecturer and Research Assistant at Veritas University, Abuja, while collaborating with the AIA4OneHealth lab on geospatial modeling and predictive analytics for disease transmission hotspots across Africa.</p>
     </div>
   </section>
 
-  <!-- Projects -->
-  <section id="projects" class="section section-alt">
-    <div class="container">
-      <h2>Featured Project</h2>
-      <div class="project-card">
-        <div class="project-content">
-          <h3>AIA4OneHealth</h3>
-          <p class="project-tag">Machine Learning · Bayesian Modeling · Multi-Objective Optimization</p>
-          <p>An end-to-end machine learning pipeline that couples a Bayesian-calibrated mechanistic Mpox model with an ML emulator ensemble and NSGA-II multi-objective optimization to recommend One Health policy packages for Nigeria and the Democratic Republic of the Congo (DRC).</p>
-          <ul class="project-details">
-            <li><strong>Mechanistic modeling:</strong> Coupled human–rodent SEIR-V ODE model</li>
-            <li><strong>Bayesian calibration:</strong> MCMC with negative-binomial likelihood and posterior predictive checks</li>
-            <li><strong>ML emulators:</strong> 5-model ensemble (GP-Matérn, GP-RBF, Random Forest, XGBoost, Neural Net)</li>
-            <li><strong>Optimization:</strong> NSGA-II 3-objective Pareto front (cases × cost × cross-domain equity)</li>
-            <li><strong>Forecasting:</strong> XGBoost lag-feature next-week case forecaster</li>
-            <li><strong>Sensitivity analysis:</strong> Sobol' total-effect indices over One Health levers</li>
-          </ul>
-          <a href="https://github.com/EgwuSamuel/AIA4OneHealthMain" class="btn btn-primary" target="_blank">View on GitHub</a>
+  <!-- Education -->
+  <section id="education" class="section section-alt">
+    <div class="section-header">
+      <h2>Education</h2>
+      <span class="section-rule"></span>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-date">Oct 2023 &ndash; Apr 2025</div>
+        <h3>MSc Computer Science</h3>
+        <p class="timeline-institution">Veritas University, Abuja, Nigeria</p>
+        <p class="timeline-detail">
+          <span class="highlight">CGPA: 4.73/5.0</span><br>
+          Advisor: Dr. Mustapha Aminu<br>
+          Thesis: <em>A Mobile-Based Maize Disease Detection System Using YOLOv11 Model</em>
+        </p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">Sep 2017 &ndash; Sep 2021</div>
+        <h3>BSc Computer Science</h3>
+        <p class="timeline-institution">Veritas University, Abuja, Nigeria</p>
+        <p class="timeline-detail">
+          <span class="highlight">CGPA: 4.56/5.0</span><br>
+          Advisor: Dr. Emmanuel Mkpojiogu<br>
+          Thesis: <em>Design and Implementation of an Online Proctoring Examination System</em>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Research Experience -->
+  <section id="research" class="section">
+    <div class="section-header">
+      <h2>Research Experience</h2>
+      <span class="section-rule"></span>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-date">Jan 2026 &ndash; Present</div>
+        <h3>Research Assistant</h3>
+        <p class="timeline-institution">AIA4OneHealth</p>
+        <p class="timeline-detail">
+          Research Areas: AI for One Health, Zoonotic Disease Surveillance, Geospatial Modeling, Deep Learning for Public Health. Contributing to development of a machine learning-driven One Health system for managing zoonotic diseases. Conducting geospatial analysis and predictive modeling of Mpox transmission hotspots.
+        </p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2023 &ndash; Present</div>
+        <h3>Research Assistant</h3>
+        <p class="timeline-institution">Veritas University, Abuja, Nigeria</p>
+        <p class="timeline-detail">
+          Research Areas: Computer Vision, Medical Imaging, Deep Learning for Disease Detection. Designed and implemented a Convolutional Neural Network (CNN) model for detecting malaria-infected cells and identifying maize streak virus. Investigated recent advancements in object detection, recognition, and tracking for embedded computer vision.
+        </p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2021 &ndash; 2024</div>
+        <h3>Undergraduate Researcher</h3>
+        <p class="timeline-institution">Veritas University, Abuja, Nigeria</p>
+        <p class="timeline-detail">
+          Research Areas: Digital Forensics, Human-Computer Interaction, Online Assessment Systems. Developed an online proctoring examination system to ensure academic integrity in remote assessments.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Publications -->
+  <section id="publications" class="section section-alt">
+    <div class="section-header">
+      <h2>Publications</h2>
+      <span class="section-rule"></span>
+      <p>Peer-reviewed publications and ongoing research</p>
+    </div>
+    <div class="pub-grid">
+
+      <!-- Pub 1 -->
+      <div class="pub-card">
+        <span class="pub-venue">AI4D 2025</span>
+        <h3>Mpox Detection System Using Deep Learning</h3>
+        <p class="pub-authors">Sodiya, A. S., Falana, O. J., <span class="me">Egwu, S. O.</span>, Imhonophi, G. B., Awodele, O., Aborisade, D. O., & Abdullahi, A.</p>
+        <p class="pub-journal">PAIDeF Artificial Intelligence for Development (AI4D) Conference Proceedings, 2025</p>
+      </div>
+
+      <!-- Pub 2 -->
+      <div class="pub-card">
+        <span class="pub-venue">IJRIAS 2024</span>
+        <h3>Advancing Malaria Detection: A Comparative Study and Proposal for Web-Based Predictive Application Utilizing CNN and TensorFlow</h3>
+        <p class="pub-authors"><span class="me">Egwu, S. O.</span>, Eseyin, J. B., Dako, A. D., & Izuafa, B. A.</p>
+        <p class="pub-journal">International Journal of Research and Innovation in Applied Science (IJRIAS), 2024: 222&ndash;232</p>
+        <p class="pub-doi"><a href="https://doi.org/10.51584/IJRIAS.2024.906020" target="_blank" rel="noopener">doi:10.51584/IJRIAS.2024.906020</a></p>
+      </div>
+
+      <!-- Pub 3 -->
+      <div class="pub-card">
+        <span class="pub-venue">ICTSSE 2024</span>
+        <h3>Recently Emerging Trends in Embedded Computer Vision for Object Detection, Recognition, and Tracking</h3>
+        <p class="pub-authors">Ikegwu, A., <span class="me">Egwu, S. O.</span>, & Nnanna, O. C.</p>
+        <p class="pub-journal">Proceedings of the International Conference on Technological Solutions for Smart Economy, Port Harcourt, Nigeria, 2024</p>
+      </div>
+
+      <!-- Pub 4 -->
+      <div class="pub-card">
+        <span class="pub-venue">ICDSE 2021</span>
+        <h3>Online Examination Proctoring for Quality Assurance in the Post COVID-19 Pandemic New Normal</h3>
+        <p class="pub-authors">Jubrin, A. M., Adebayo, O. S., Philips, A., Joshua, A., & <span class="me">Egwu, S. O.</span></p>
+        <p class="pub-journal">Proceedings of the 1st International Conference on Data Science and Engineering, Nigeria, 2021: 25&ndash;33</p>
+      </div>
+
+      <!-- Under Review -->
+      <div class="pub-card">
+        <span class="pub-status under-review">Under Review</span>
+        <h3>Mpox-HSAM: A Mpox Detection System Using Optimised Hybrid Deep Learning Model</h3>
+        <p class="pub-authors">Sodiya, A. S., Aborisade, D. O., <span class="me">Egwu, S. O.</span>, Abdullahi, A., & Olasoju, M. I.</p>
+        <p class="pub-journal">Manuscript submitted to Scientific Reports, 2026</p>
+      </div>
+
+      <!-- Ongoing -->
+      <div class="pub-card">
+        <span class="pub-status ongoing">Ongoing Work</span>
+        <h3>A Machine Learning-Driven One Health System for Managing Zoonotic Diseases</h3>
+        <p class="pub-authors">Contributing researcher &mdash; AIA4OneHealth</p>
+      </div>
+
+      <div class="pub-card">
+        <span class="pub-status ongoing">Ongoing Work</span>
+        <h3>Geospatial Analysis and Predictive Modeling of Mpox Transmission Hotspots: A Case Study of Ogun State</h3>
+        <p class="pub-authors">Contributing researcher &mdash; AIA4OneHealth</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Honors & Awards -->
+  <section id="awards" class="section">
+    <div class="section-header">
+      <h2>Honors & Awards</h2>
+      <span class="section-rule"></span>
+    </div>
+    <div class="awards-list">
+      <div class="award-item">
+        <div class="award-icon">&#9733;</div>
+        <div class="award-info">
+          <h4>Constructor Institute Full Tuition Waiver, Switzerland</h4>
+          <p class="award-detail">Value: $40,000 &mdash; Declined in favor of Veritas University funded MSc</p>
         </div>
+        <span class="award-year">2024</span>
+      </div>
+      <div class="award-item">
+        <div class="award-icon">&#9733;</div>
+        <div class="award-info">
+          <h4>ATU Africa Innovation Challenge (3rd Edition) &mdash; Team Member</h4>
+          <p class="award-detail">Value: $20,000 &mdash; Department of Software Engineering, Veritas University</p>
+        </div>
+        <span class="award-year">2024</span>
+      </div>
+      <div class="award-item">
+        <div class="award-icon">&#9733;</div>
+        <div class="award-info">
+          <h4>Veritas University Software Exhibition Grant</h4>
+          <p class="award-detail">Value: $1,000</p>
+        </div>
+        <span class="award-year">2024</span>
+      </div>
+      <div class="award-item">
+        <div class="award-icon">&#9733;</div>
+        <div class="award-info">
+          <h4>Best Student (MSc Computer Science), Veritas University</h4>
+        </div>
+        <span class="award-year">2024</span>
+      </div>
+      <div class="award-item">
+        <div class="award-icon">&#9733;</div>
+        <div class="award-info">
+          <h4>Igala Education Foundation, Recognition of Academic Excellence</h4>
+          <p class="award-detail">Value: $70</p>
+        </div>
+        <span class="award-year">2022</span>
+      </div>
+      <div class="award-item">
+        <div class="award-icon">&#9733;</div>
+        <div class="award-info">
+          <h4>Best Behaved Student, Graduation Set &mdash; Veritas University</h4>
+          <p class="award-detail">Value: $250</p>
+        </div>
+        <span class="award-year">2021</span>
+      </div>
+      <div class="award-item">
+        <div class="award-icon">&#9733;</div>
+        <div class="award-info">
+          <h4>Best Student (BSc 400 Level) &mdash; Veritas University</h4>
+        </div>
+        <span class="award-year">2021</span>
+      </div>
+      <div class="award-item">
+        <div class="award-icon">&#9733;</div>
+        <div class="award-info">
+          <h4>Best Undergraduate Project &mdash; Veritas University</h4>
+        </div>
+        <span class="award-year">2021</span>
+      </div>
+      <div class="award-item">
+        <div class="award-icon">&#9733;</div>
+        <div class="award-info">
+          <h4>Senior Mathematics Olympiad Winner</h4>
+        </div>
+        <span class="award-year">2017</span>
       </div>
     </div>
   </section>
 
   <!-- Skills -->
-  <section id="skills" class="section">
+  <section id="skills" class="section section-alt">
+    <div class="section-header">
+      <h2>Skills & Expertise</h2>
+      <span class="section-rule"></span>
+    </div>
     <div class="container">
-      <h2>Skills & Tools</h2>
       <div class="skills-grid">
         <div class="skill-category">
-          <h3>Languages</h3>
+          <h3>Programming</h3>
           <ul>
             <li>Python</li>
-            <li>R</li>
+            <li>C++</li>
+            <li>Java</li>
+            <li>JavaScript</li>
             <li>SQL</li>
+            <li>R</li>
           </ul>
         </div>
         <div class="skill-category">
-          <h3>ML & Statistics</h3>
+          <h3>Machine Learning</h3>
           <ul>
-            <li>Scikit-learn</li>
-            <li>XGBoost</li>
-            <li>Gaussian Processes</li>
-            <li>Neural Networks</li>
+            <li>TensorFlow</li>
+            <li>PyTorch</li>
+            <li>scikit-learn</li>
+            <li>OpenCV</li>
+            <li>CNNs & Deep Learning</li>
+            <li>Supervised & Unsupervised</li>
+          </ul>
+        </div>
+        <div class="skill-category">
+          <h3>Modeling & Statistics</h3>
+          <ul>
             <li>Bayesian Inference (MCMC)</li>
-            <li>Sobol' Sensitivity Analysis</li>
-          </ul>
-        </div>
-        <div class="skill-category">
-          <h3>Optimization & Modeling</h3>
-          <ul>
-            <li>NSGA-II (Multi-Objective)</li>
             <li>ODE Compartmental Models</li>
-            <li>Mechanistic Disease Modeling</li>
+            <li>Geospatial Analysis</li>
+            <li>XGBoost & Ensembles</li>
+            <li>Gaussian Processes</li>
           </ul>
         </div>
         <div class="skill-category">
-          <h3>Data & Visualization</h3>
+          <h3>Tools & Platforms</h3>
           <ul>
-            <li>Pandas · NumPy · SciPy</li>
-            <li>Matplotlib · Seaborn</li>
+            <li>Visual Studio</li>
+            <li>PyCharm</li>
             <li>Jupyter Notebooks</li>
-            <li>Geospatial Analysis</li>
+            <li>GNU/Linux</li>
+            <li>MATLAB</li>
+            <li>Git</li>
           </ul>
         </div>
       </div>
@@ -114,29 +320,47 @@
   </section>
 
   <!-- Contact -->
-  <section id="contact" class="section section-alt">
-    <div class="container">
+  <section id="contact" class="section">
+    <div class="section-header">
       <h2>Get in Touch</h2>
-      <p>Interested in collaboration or want to learn more about my work?</p>
-      <div class="contact-links">
-        <a href="https://github.com/EgwuSamuel" class="contact-item" target="_blank">
-          <span class="contact-icon">&#9906;</span>
-          <span>GitHub</span>
-        </a>
-        <a href="https://linkedin.com/in/egwusamuel" class="contact-item" target="_blank">
-          <span class="contact-icon">&#9993;</span>
-          <span>LinkedIn</span>
-        </a>
-      </div>
+      <span class="section-rule"></span>
+      <p>Interested in collaboration or research opportunities? I'd love to hear from you.</p>
+    </div>
+    <div class="contact-links">
+      <a href="mailto:egwusamuel17@gmail.com" class="contact-item">
+        <span class="contact-icon">&#9993;</span>
+        <span>Email</span>
+      </a>
+      <a href="https://linkedin.com/in/egwusamuel" class="contact-item" target="_blank" rel="noopener">
+        <span class="contact-icon">&#9757;</span>
+        <span>LinkedIn</span>
+      </a>
+      <a href="https://github.com/EgwuSamuel" class="contact-item" target="_blank" rel="noopener">
+        <span class="contact-icon">&#9906;</span>
+        <span>GitHub</span>
+      </a>
+      <a href="https://scholar.google.com/citations?user=YOUR_ID" class="contact-item" target="_blank" rel="noopener">
+        <span class="contact-icon">&#9733;</span>
+        <span>Google Scholar</span>
+      </a>
     </div>
   </section>
 
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
-      <p>&copy; 2026 Samuel Egwu. All rights reserved.</p>
+      <p>&copy; 2026 <span class="footer-accent">Samuel Onuche-Ojo Egwu</span> &mdash; Abuja, Nigeria</p>
     </div>
   </footer>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-796SDYQKFT"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-796SDYQKFT');
+  </script>
 
 </body>
 </html>
