@@ -139,6 +139,14 @@ a:hover { color: var(--gold-light); }
   color: var(--gold);
   text-decoration: none;
   letter-spacing: 0.03em;
+  display: inline-flex;
+  align-items: center;
+}
+
+.logo-img {
+  height: 40px;
+  width: auto;
+  display: block;
 }
 
 .nav-links {
@@ -191,8 +199,8 @@ a:hover { color: var(--gold-light); }
 }
 
 .hero-profile {
-  width: 350px;
-  height: 350px;
+  width: 450px;
+  height: 450px;
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid var(--gold);
@@ -840,6 +848,48 @@ a:hover { color: var(--gold-light); }
   background: var(--bg-deep);
 }
 
+/* Admin Tabs */
+.admin-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 0;
+}
+
+.admin-tab {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.7rem 1.3rem;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: all var(--transition);
+  letter-spacing: 0.03em;
+}
+
+.admin-tab:hover {
+  color: var(--text);
+}
+
+.admin-tab.active {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+
+.admin-panel {
+  display: none;
+}
+
+.admin-panel.active {
+  display: block;
+}
+
 /* Login Gate */
 .login-gate {
   min-height: 100vh;
@@ -1146,7 +1196,7 @@ a:hover { color: var(--gold-light); }
   h2 { font-size: 1.6rem; }
 
   .hero h1 { font-size: 2.2rem; }
-  .hero-profile { width: 180px; height: 180px; }
+  .hero-profile { width: 200px; height: 200px; }
 
   .nav-links { gap: 1rem; }
   .nav-links a { font-size: 0.8rem; }

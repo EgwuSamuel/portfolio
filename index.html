@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Samuel Onuche-Ojo Egwu — Academic Portfolio</title>
   <meta name="description" content="Samuel Onuche-Ojo Egwu — Medical Imaging, Computer Vision & Machine Learning Researcher. MSc Computer Science, Veritas University. AI4OneHealth contributor.">
+  <link rel="icon" href="Logo.JPG" type="image/jpeg">
   <link rel="stylesheet" href="style.css">
+  <script src="data.js"></script>
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-796SDYQKFT"></script>
   <script>
@@ -20,7 +22,7 @@
   <!-- Navigation -->
   <nav class="navbar">
     <div class="container">
-      <a href="index.html" class="logo">S.O. Egwu</a>
+      <a href="index.html" class="logo"><img src="Logo.JPG" alt="S.O. Egwu" class="logo-img" height="40"></a>
       <ul class="nav-links">
         <li><a href="#about" class="nav-active">About</a></li>
         <li><a href="#education">Education</a></li>
@@ -35,7 +37,7 @@
   <!-- Hero -->
   <header class="hero">
     <div class="container">
-      <img src="SamProfile.jpg" alt="Samuel Onuche-Ojo Egwu" class="hero-profile" width="350" height="350">
+      <img src="SamProfile.jpg" alt="Samuel Onuche-Ojo Egwu" class="hero-profile" width="450" height="450">
       <h1>Samuel Onuche-Ojo Egwu</h1>
       <p class="hero-subtitle">Medical Imaging &bull; Computer Vision &bull; Machine Learning</p>
       <p class="hero-tagline">Bridging AI and public health through rigorous research in disease detection, deep learning, and One Health surveillance systems.</p>
@@ -60,7 +62,7 @@
       <p>Researcher & Educator at the Intersection of AI and Public Health</p>
     </div>
     <div class="about-content">
-      <p>I am a computer scientist and machine learning researcher dedicated to applying computational methods to pressing public health challenges. My work spans medical imaging—developing deep learning models for malaria and maize disease detection—and One Health surveillance, where I contribute to AI-driven systems for managing zoonotic diseases like Mpox. I serve as an Assistant Lecturer and Research Assistant at Veritas University, Abuja, while collaborating with the AIA4OneHealth lab on geospatial modeling and predictive analytics for disease transmission hotspots across Africa.</p>
+      <p id="about-text"></p>
     </div>
   </section>
 
@@ -70,28 +72,7 @@
       <h2>Education</h2>
       <span class="section-rule"></span>
     </div>
-    <div class="timeline">
-      <div class="timeline-item">
-        <div class="timeline-date">Oct 2023 &ndash; Apr 2025</div>
-        <h3>MSc Computer Science</h3>
-        <p class="timeline-institution">Veritas University, Abuja, Nigeria</p>
-        <p class="timeline-detail">
-          <span class="highlight">CGPA: 4.73/5.0</span><br>
-          Advisor: Dr. Mustapha Aminu<br>
-          Thesis: <em>A Mobile-Based Maize Disease Detection System Using YOLOv11 Model</em>
-        </p>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-date">Sep 2017 &ndash; Sep 2021</div>
-        <h3>BSc Computer Science</h3>
-        <p class="timeline-institution">Veritas University, Abuja, Nigeria</p>
-        <p class="timeline-detail">
-          <span class="highlight">CGPA: 4.56/5.0</span><br>
-          Advisor: Dr. Emmanuel Mkpojiogu<br>
-          Thesis: <em>Design and Implementation of an Online Proctoring Examination System</em>
-        </p>
-      </div>
-    </div>
+    <div class="timeline" id="education-list"></div>
   </section>
 
   <!-- Research Experience -->
@@ -100,32 +81,7 @@
       <h2>Research Experience</h2>
       <span class="section-rule"></span>
     </div>
-    <div class="timeline">
-      <div class="timeline-item">
-        <div class="timeline-date">Jan 2026 &ndash; Present</div>
-        <h3>Research Assistant</h3>
-        <p class="timeline-institution">AIA4OneHealth</p>
-        <p class="timeline-detail">
-          Research Areas: AI for One Health, Zoonotic Disease Surveillance, Geospatial Modeling, Deep Learning for Public Health. Contributing to development of a machine learning-driven One Health system for managing zoonotic diseases. Conducting geospatial analysis and predictive modeling of Mpox transmission hotspots.
-        </p>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-date">2023 &ndash; Present</div>
-        <h3>Research Assistant</h3>
-        <p class="timeline-institution">Veritas University, Abuja, Nigeria</p>
-        <p class="timeline-detail">
-          Research Areas: Computer Vision, Medical Imaging, Deep Learning for Disease Detection. Designed and implemented a Convolutional Neural Network (CNN) model for detecting malaria-infected cells and identifying maize streak virus. Investigated recent advancements in object detection, recognition, and tracking for embedded computer vision.
-        </p>
-      </div>
-      <div class="timeline-item">
-        <div class="timeline-date">2021 &ndash; 2024</div>
-        <h3>Undergraduate Researcher</h3>
-        <p class="timeline-institution">Veritas University, Abuja, Nigeria</p>
-        <p class="timeline-detail">
-          Research Areas: Digital Forensics, Human-Computer Interaction, Online Assessment Systems. Developed an online proctoring examination system to ensure academic integrity in remote assessments.
-        </p>
-      </div>
-    </div>
+    <div class="timeline" id="research-list"></div>
   </section>
 
   <!-- Publications -->
@@ -135,63 +91,7 @@
       <span class="section-rule"></span>
       <p>Peer-reviewed publications and ongoing research</p>
     </div>
-    <div class="pub-grid">
-
-      <!-- Pub 1 -->
-      <div class="pub-card">
-        <span class="pub-venue">AI4D 2025</span>
-        <h3>Mpox Detection System Using Deep Learning</h3>
-        <p class="pub-authors">Sodiya, A. S., Falana, O. J., <span class="me">Egwu, S. O.</span>, Imhonophi, G. B., Awodele, O., Aborisade, D. O., & Abdullahi, A.</p>
-        <p class="pub-journal">PAIDeF Artificial Intelligence for Development (AI4D) Conference Proceedings, 2025</p>
-      </div>
-
-      <!-- Pub 2 -->
-      <div class="pub-card">
-        <span class="pub-venue">IJRIAS 2024</span>
-        <h3>Advancing Malaria Detection: A Comparative Study and Proposal for Web-Based Predictive Application Utilizing CNN and TensorFlow</h3>
-        <p class="pub-authors"><span class="me">Egwu, S. O.</span>, Eseyin, J. B., Dako, A. D., & Izuafa, B. A.</p>
-        <p class="pub-journal">International Journal of Research and Innovation in Applied Science (IJRIAS), 2024: 222&ndash;232</p>
-        <p class="pub-doi"><a href="https://doi.org/10.51584/IJRIAS.2024.906020" target="_blank" rel="noopener">doi:10.51584/IJRIAS.2024.906020</a></p>
-      </div>
-
-      <!-- Pub 3 -->
-      <div class="pub-card">
-        <span class="pub-venue">ICTSSE 2024</span>
-        <h3>Recently Emerging Trends in Embedded Computer Vision for Object Detection, Recognition, and Tracking</h3>
-        <p class="pub-authors">Ikegwu, A., <span class="me">Egwu, S. O.</span>, & Nnanna, O. C.</p>
-        <p class="pub-journal">Proceedings of the International Conference on Technological Solutions for Smart Economy, Port Harcourt, Nigeria, 2024</p>
-      </div>
-
-      <!-- Pub 4 -->
-      <div class="pub-card">
-        <span class="pub-venue">ICDSE 2021</span>
-        <h3>Online Examination Proctoring for Quality Assurance in the Post COVID-19 Pandemic New Normal</h3>
-        <p class="pub-authors">Jubrin, A. M., Adebayo, O. S., Philips, A., Joshua, A., & <span class="me">Egwu, S. O.</span></p>
-        <p class="pub-journal">Proceedings of the 1st International Conference on Data Science and Engineering, Nigeria, 2021: 25&ndash;33</p>
-      </div>
-
-      <!-- Under Review -->
-      <div class="pub-card">
-        <span class="pub-status under-review">Under Review</span>
-        <h3>Mpox-HSAM: A Mpox Detection System Using Optimised Hybrid Deep Learning Model</h3>
-        <p class="pub-authors">Sodiya, A. S., Aborisade, D. O., <span class="me">Egwu, S. O.</span>, Abdullahi, A., & Olasoju, M. I.</p>
-        <p class="pub-journal">Manuscript submitted to Scientific Reports, 2026</p>
-      </div>
-
-      <!-- Ongoing -->
-      <div class="pub-card">
-        <span class="pub-status ongoing">Ongoing Work</span>
-        <h3>A Machine Learning-Driven One Health System for Managing Zoonotic Diseases</h3>
-        <p class="pub-authors">Contributing researcher &mdash; AIA4OneHealth</p>
-      </div>
-
-      <div class="pub-card">
-        <span class="pub-status ongoing">Ongoing Work</span>
-        <h3>Geospatial Analysis and Predictive Modeling of Mpox Transmission Hotspots: A Case Study of Ogun State</h3>
-        <p class="pub-authors">Contributing researcher &mdash; AIA4OneHealth</p>
-      </div>
-
-    </div>
+    <div class="pub-grid" id="publications-list"></div>
   </section>
 
   <!-- Honors & Awards -->
@@ -200,76 +100,7 @@
       <h2>Honors & Awards</h2>
       <span class="section-rule"></span>
     </div>
-    <div class="awards-list">
-      <div class="award-item">
-        <div class="award-icon">&#9733;</div>
-        <div class="award-info">
-          <h4>Constructor Institute Full Tuition Waiver, Switzerland</h4>
-          <p class="award-detail">Value: $40,000 &mdash; Declined in favor of Veritas University funded MSc</p>
-        </div>
-        <span class="award-year">2024</span>
-      </div>
-      <div class="award-item">
-        <div class="award-icon">&#9733;</div>
-        <div class="award-info">
-          <h4>ATU Africa Innovation Challenge (3rd Edition) &mdash; Team Member</h4>
-          <p class="award-detail">Value: $20,000 &mdash; Department of Software Engineering, Veritas University</p>
-        </div>
-        <span class="award-year">2024</span>
-      </div>
-      <div class="award-item">
-        <div class="award-icon">&#9733;</div>
-        <div class="award-info">
-          <h4>Veritas University Software Exhibition Grant</h4>
-          <p class="award-detail">Value: $1,000</p>
-        </div>
-        <span class="award-year">2024</span>
-      </div>
-      <div class="award-item">
-        <div class="award-icon">&#9733;</div>
-        <div class="award-info">
-          <h4>Best Student (MSc Computer Science), Veritas University</h4>
-        </div>
-        <span class="award-year">2024</span>
-      </div>
-      <div class="award-item">
-        <div class="award-icon">&#9733;</div>
-        <div class="award-info">
-          <h4>Igala Education Foundation, Recognition of Academic Excellence</h4>
-          <p class="award-detail">Value: $70</p>
-        </div>
-        <span class="award-year">2022</span>
-      </div>
-      <div class="award-item">
-        <div class="award-icon">&#9733;</div>
-        <div class="award-info">
-          <h4>Best Behaved Student, Graduation Set &mdash; Veritas University</h4>
-          <p class="award-detail">Value: $250</p>
-        </div>
-        <span class="award-year">2021</span>
-      </div>
-      <div class="award-item">
-        <div class="award-icon">&#9733;</div>
-        <div class="award-info">
-          <h4>Best Student (BSc 400 Level) &mdash; Veritas University</h4>
-        </div>
-        <span class="award-year">2021</span>
-      </div>
-      <div class="award-item">
-        <div class="award-icon">&#9733;</div>
-        <div class="award-info">
-          <h4>Best Undergraduate Project &mdash; Veritas University</h4>
-        </div>
-        <span class="award-year">2021</span>
-      </div>
-      <div class="award-item">
-        <div class="award-icon">&#9733;</div>
-        <div class="award-info">
-          <h4>Senior Mathematics Olympiad Winner</h4>
-        </div>
-        <span class="award-year">2017</span>
-      </div>
-    </div>
+    <div class="awards-list" id="awards-list"></div>
   </section>
 
   <!-- Skills -->
@@ -360,6 +191,92 @@
       <p>&copy; 2026 <span class="footer-accent">Samuel Onuche-Ojo Egwu</span> &mdash; Abuja, Nigeria</p>
     </div>
   </footer>
+
+  <script>
+    // ===== Render dynamic content =====
+    function renderAbout() {
+      const text = loadData('about');
+      document.getElementById('about-text').textContent = text;
+    }
+
+    function renderEducation() {
+      const items = loadData('education');
+      const container = document.getElementById('education-list');
+      container.innerHTML = items.map(item => `
+        <div class="timeline-item">
+          <div class="timeline-date">${escapeHtml(item.date)}</div>
+          <h3>${escapeHtml(item.degree)}</h3>
+          <p class="timeline-institution">${escapeHtml(item.institution)}</p>
+          <p class="timeline-detail">${escapeHtml(item.details)}</p>
+        </div>
+      `).join('');
+    }
+
+    function renderResearch() {
+      const items = loadData('research');
+      const container = document.getElementById('research-list');
+      container.innerHTML = items.map(item => `
+        <div class="timeline-item">
+          <div class="timeline-date">${escapeHtml(item.date)}</div>
+          <h3>${escapeHtml(item.role)}</h3>
+          <p class="timeline-institution">${escapeHtml(item.institution)}</p>
+          <p class="timeline-detail">${escapeHtml(item.details)}</p>
+        </div>
+      `).join('');
+    }
+
+    function renderPublications() {
+      const items = loadData('publications');
+      const container = document.getElementById('publications-list');
+      container.innerHTML = items.map(pub => {
+        let topTag = '';
+        if (pub.status === 'published' && pub.venue) {
+          topTag = `<span class="pub-venue">${escapeHtml(pub.venue)}</span>`;
+        } else if (pub.status === 'under-review') {
+          topTag = `<span class="pub-status under-review">Under Review</span>`;
+        } else if (pub.status === 'ongoing') {
+          topTag = `<span class="pub-status ongoing">Ongoing Work</span>`;
+        }
+        const doiHtml = pub.doi ? `<p class="pub-doi"><a href="${escapeHtml(pub.doi)}" target="_blank" rel="noopener">${escapeHtml(pub.doi)}</a></p>` : '';
+        // Highlight "Egwu, S. O." in authors
+        let authorsHtml = escapeHtml(pub.authors).replace(/Egwu, S\. O\./g, '<span class="me">Egwu, S. O.</span>');
+        return `
+          <div class="pub-card">
+            ${topTag}
+            <h3>${escapeHtml(pub.title)}</h3>
+            <p class="pub-authors">${authorsHtml}</p>
+            <p class="pub-journal">${escapeHtml(pub.journal)}</p>
+            ${doiHtml}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderAwards() {
+      const items = loadData('awards');
+      const container = document.getElementById('awards-list');
+      container.innerHTML = items.map(a => `
+        <div class="award-item">
+          <div class="award-icon">&#9733;</div>
+          <div class="award-info">
+            <h4>${escapeHtml(a.name)}</h4>
+            ${a.detail ? `<p class="award-detail">${escapeHtml(a.detail)}</p>` : ''}
+          </div>
+          <span class="award-year">${escapeHtml(a.year)}</span>
+        </div>
+      `).join('');
+    }
+
+    function renderAll() {
+      renderAbout();
+      renderEducation();
+      renderResearch();
+      renderPublications();
+      renderAwards();
+    }
+
+    document.addEventListener('DOMContentLoaded', renderAll);
+  </script>
 
 </body>
 </html>
