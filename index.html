@@ -32,6 +32,7 @@
         <li><a href="#education">Education</a></li>
         <li><a href="#research">Research</a></li>
         <li><a href="#publications">Publications</a></li>
+        <li><a href="#projects">Projects</a></li>
         <li><a href="#awards">Awards</a></li>
         <li><a href="blog.html">Blog</a></li>
       </ul>
@@ -107,8 +108,18 @@
     <div class="pub-grid" id="publications-list"></div>
   </section>
 
+  <!-- Projects -->
+  <section id="projects" class="section">
+    <div class="section-header">
+      <h2>Projects</h2>
+      <span class="section-rule"></span>
+      <p>Selected projects and applied research work</p>
+    </div>
+    <div class="projects-grid" id="projects-list"></div>
+  </section>
+
   <!-- Honors & Awards -->
-  <section id="awards" class="section">
+  <section id="awards" class="section section-alt">
     <div class="section-header">
       <h2>Honors & Awards</h2>
       <span class="section-rule"></span>
@@ -117,7 +128,7 @@
   </section>
 
   <!-- Skills -->
-  <section id="skills" class="section section-alt">
+  <section id="skills" class="section">
     <div class="section-header">
       <h2>Skills & Expertise</h2>
       <span class="section-rule"></span>
@@ -172,7 +183,7 @@
   </section>
 
   <!-- Contact -->
-  <section id="contact" class="section">
+  <section id="contact" class="section section-alt">
     <div class="section-header">
       <h2>Get in Touch</h2>
       <span class="section-rule"></span>
@@ -286,6 +297,35 @@
       }).join('');
     }
 
+    function renderProjects() {
+      const items = loadData('projects');
+      const section = document.getElementById('projects');
+      const container = document.getElementById('projects-list');
+      if (!items || items.length === 0) {
+        if (section) section.style.display = 'none';
+        return;
+      }
+      if (section) section.style.display = '';
+      container.innerHTML = items.map(p => {
+        const imgs = Array.isArray(p.images) ? p.images : [];
+        const gallery = imgs.length
+          ? `<div class="project-images">${imgs.map(src => `<img src="${escapeHtml(src)}" alt="${escapeHtml(p.title)}" loading="lazy">`).join('')}</div>`
+          : '';
+        const link = p.link
+          ? `<a class="project-link" href="${escapeHtml(p.link)}" target="_blank" rel="noopener">Visit project &rarr;</a>`
+          : '';
+        return `
+          <article class="project-card">
+            ${gallery}
+            <div class="project-body">
+              <h3>${escapeHtml(p.title)}</h3>
+              <p class="project-desc">${escapeHtml(p.description).replace(/\n/g, '<br>')}</p>
+              ${link}
+            </div>
+          </article>`;
+      }).join('');
+    }
+
     function renderAwards() {
       const items = loadData('awards');
       const container = document.getElementById('awards-list');
@@ -307,6 +347,7 @@
       renderEducation();
       renderResearch();
       renderPublications();
+      renderProjects();
       renderAwards();
     }
 

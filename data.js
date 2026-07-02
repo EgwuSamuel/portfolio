@@ -40,6 +40,7 @@ const SEED_DATA = {
       date: "Jan 2026 – Present",
       role: "Research Assistant",
       institution: "AIA4OneHealth",
+      url: "https://aia4onehealth.org/",
       details: "Research Areas: AI for One Health, Zoonotic Disease Surveillance, Geospatial Modeling, Deep Learning for Public Health. Contributing to development of a machine learning-driven One Health system for managing zoonotic diseases. Conducting geospatial analysis and predictive modeling of Mpox transmission hotspots."
     },
     {
@@ -138,6 +139,30 @@ const SEED_DATA = {
     { id: "awd-009", name: "Senior Mathematics Olympiad Winner", detail: "", year: "2017" }
   ],
 
+  projects: [
+    {
+      id: "proj-001",
+      title: "Maize Disease Detection System",
+      description: "A mobile-based system that detects maize leaf diseases from images using the YOLOv11 object-detection model. Developed as my MSc thesis to support smallholder farmers with fast, on-device crop diagnosis.",
+      link: "",
+      images: []
+    },
+    {
+      id: "proj-002",
+      title: "Malaria Detection Web Application",
+      description: "A web-based predictive application that classifies malaria-infected blood cells using a Convolutional Neural Network built with TensorFlow, aimed at accessible, low-cost screening.",
+      link: "https://doi.org/10.51584/IJRIAS.2024.906020",
+      images: []
+    },
+    {
+      id: "proj-003",
+      title: "Mpox Detection System",
+      description: "A deep learning system for detecting Mpox from skin-lesion images, presented at the AI4D 2025 conference as part of ongoing One Health surveillance research.",
+      link: "",
+      images: []
+    }
+  ],
+
   blog: [
     {
       id: "seed-001",
@@ -158,6 +183,7 @@ const STORAGE_KEYS = {
   research: 'portfolio_research',
   publications: 'portfolio_publications',
   awards: 'portfolio_awards',
+  projects: 'portfolio_projects',
   blog: 'admin_posts',
   pin: 'admin_pin'
 };

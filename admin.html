@@ -61,6 +61,7 @@
         <button class="admin-tab" data-tab="research">Research</button>
         <button class="admin-tab" data-tab="publications">Publications</button>
         <button class="admin-tab" data-tab="awards">Awards</button>
+        <button class="admin-tab" data-tab="projects">Projects</button>
         <button class="admin-tab" data-tab="blog">Blog</button>
       </div>
 
@@ -181,6 +182,29 @@
         <h3 style="margin:1.5rem 0 0.75rem;">All Awards</h3>
         <div class="admin-post-list" id="awd-list"></div>
         <div id="awd-empty" style="text-align:center;padding:2rem 0;display:none;color:var(--text-muted);">No awards yet.</div>
+      </div>
+
+      <!-- ===== Projects Panel ===== -->
+      <div class="admin-panel" id="panel-projects">
+        <div class="post-form" id="proj-form">
+          <h3 id="proj-form-title">Add Project</h3>
+          <input type="hidden" id="proj-edit-id">
+          <div class="form-group"><label for="proj-title">Project Title</label><input type="text" id="proj-title" placeholder="e.g., Maize Disease Detection System"></div>
+          <div class="form-group"><label for="proj-description">Description</label><textarea id="proj-description" rows="4" placeholder="Describe the project..."></textarea></div>
+          <div class="form-group"><label for="proj-link">Project Link (optional)</label><input type="text" id="proj-link" placeholder="https://..."></div>
+          <div class="form-group">
+            <label for="proj-images">Images (optional — you can add several)</label>
+            <input type="file" id="proj-images" accept="image/*" multiple>
+            <div class="proj-thumbs" id="proj-thumbs"></div>
+          </div>
+          <div class="form-actions">
+            <button class="btn btn-primary" id="save-proj-btn">Save Project</button>
+            <button class="btn btn-outline" id="cancel-proj-btn" style="display:none;">Cancel</button>
+          </div>
+        </div>
+        <h3 style="margin:1.5rem 0 0.75rem;">All Projects</h3>
+        <div class="admin-post-list" id="proj-list"></div>
+        <div id="proj-empty" style="text-align:center;padding:2rem 0;display:none;color:var(--text-muted);">No projects yet.</div>
       </div>
 
       <!-- ===== Blog Panel ===== -->
@@ -574,6 +598,118 @@
     }
     document.getElementById('cancel-awd-btn').addEventListener('click', resetAwdForm);
 
+    // ===== Projects =====
+    let projCurrentImages = [];
+
+    // Downscale + compress an image file to a JPEG data URL to keep localStorage small
+    function fileToDataUrl(file, maxDim, quality) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = e => {
+          const img = new Image();
+          img.onload = () => {
+            let w = img.width, h = img.height;
+            if (w > maxDim || h > maxDim) {
+              const scale = maxDim / Math.max(w, h);
+              w = Math.round(w * scale); h = Math.round(h * scale);
+            }
+            const canvas = document.createElement('canvas');
+            canvas.width = w; canvas.height = h;
+            canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+            resolve(canvas.toDataURL('image/jpeg', quality));
+          };
+          img.onerror = reject;
+          img.src = e.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function renderProjThumbs() {
+      const wrap = document.getElementById('proj-thumbs');
+      wrap.innerHTML = projCurrentImages.map((src, i) => `
+        <div class="proj-thumb"><img src="${src}" alt="preview"><button type="button" class="proj-thumb-remove" data-i="${i}" title="Remove">&times;</button></div>
+      `).join('');
+    }
+
+    document.getElementById('proj-images').addEventListener('change', async (e) => {
+      const files = Array.from(e.target.files);
+      for (const f of files) {
+        if (!f.type.startsWith('image/')) continue;
+        try { projCurrentImages.push(await fileToDataUrl(f, 1000, 0.82)); }
+        catch (err) { showToast('Could not process an image.', 'error'); }
+      }
+      e.target.value = '';
+      renderProjThumbs();
+    });
+
+    document.getElementById('proj-thumbs').addEventListener('click', e => {
+      if (!e.target.classList.contains('proj-thumb-remove')) return;
+      projCurrentImages.splice(parseInt(e.target.dataset.i, 10), 1);
+      renderProjThumbs();
+    });
+
+    function loadProjects() {
+      const items = loadData('projects');
+      const renderFn = item => {
+        const count = Array.isArray(item.images) ? item.images.length : 0;
+        return `
+        <div class="admin-post-item">
+          <div class="admin-post-info">
+            <h4>${escapeHtml(item.title)}</h4>
+            <div class="admin-post-meta"><span>${count} image${count === 1 ? '' : 's'}</span>${item.link ? '<span>has link</span>' : ''}</div>
+          </div>
+          <div class="admin-post-actions">
+            <button class="btn btn-outline btn-sm" onclick="editProject('${item.id}')">Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteItem('projects', loadData('projects'), '${item.id}', 'proj-list', 'proj-empty', projRenderFn)">Delete</button>
+          </div>
+        </div>`;
+      };
+      window.projRenderFn = renderFn;
+      renderItemList('proj-list', 'proj-empty', items, renderFn);
+    }
+    document.getElementById('save-proj-btn').addEventListener('click', () => {
+      const title = document.getElementById('proj-title').value.trim();
+      const description = document.getElementById('proj-description').value.trim();
+      const link = document.getElementById('proj-link').value.trim();
+      const editId = document.getElementById('proj-edit-id').value;
+      if (!title) { showToast('Project title is required.', 'error'); return; }
+      const entry = { id: editId || generateId(), title, description, link, images: [...projCurrentImages] };
+      let items = loadData('projects');
+      if (editId) { items = items.map(i => i.id === editId ? entry : i); } else { items.push(entry); }
+      try {
+        saveData('projects', items);
+      } catch (err) {
+        showToast('Storage full — use fewer or smaller images.', 'error');
+        return;
+      }
+      loadProjects(); resetProjForm(); showToast(editId ? 'Updated.' : 'Added.', 'success');
+    });
+    function editProject(id) {
+      const item = loadData('projects').find(i => i.id === id); if (!item) return;
+      document.getElementById('proj-edit-id').value = item.id;
+      document.getElementById('proj-title').value = item.title;
+      document.getElementById('proj-description').value = item.description || '';
+      document.getElementById('proj-link').value = item.link || '';
+      projCurrentImages = Array.isArray(item.images) ? [...item.images] : [];
+      renderProjThumbs();
+      document.getElementById('proj-form-title').textContent = 'Edit Project';
+      document.getElementById('cancel-proj-btn').style.display = 'inline-block';
+      document.getElementById('proj-form').scrollIntoView({ behavior: 'smooth' });
+    }
+    function resetProjForm() {
+      document.getElementById('proj-edit-id').value = '';
+      document.getElementById('proj-title').value = '';
+      document.getElementById('proj-description').value = '';
+      document.getElementById('proj-link').value = '';
+      projCurrentImages = [];
+      renderProjThumbs();
+      document.getElementById('proj-form-title').textContent = 'Add Project';
+      document.getElementById('cancel-proj-btn').style.display = 'none';
+    }
+    document.getElementById('cancel-proj-btn').addEventListener('click', resetProjForm);
+
     // ===== Blog =====
     function loadBlog() {
       const items = loadData('blog');
@@ -631,6 +767,7 @@
         research: loadData('research'),
         publications: loadData('publications'),
         awards: loadData('awards'),
+        projects: loadData('projects'),
         blog: loadData('blog')
       };
       const blob = new Blob([JSON.stringify(all, null, 2)], { type: 'application/json' });
@@ -642,7 +779,7 @@
 
     // --- Load All Panels ---
     function loadAllPanels() {
-      loadAbout(); loadExperience(); loadEducation(); loadResearch(); loadPublications(); loadAwards(); loadBlog();
+      loadAbout(); loadExperience(); loadEducation(); loadResearch(); loadPublications(); loadAwards(); loadProjects(); loadBlog();
       document.getElementById('blog-date').value = new Date().toISOString().slice(0, 10);
     }
 
