@@ -10,6 +10,7 @@ const SEED_DATA = {
       date: "Oct 2023 – Apr 2025",
       degree: "MSc Computer Science",
       institution: "Veritas University, Abuja, Nigeria",
+      url: "https://veritas.edu.ng",
       details: "CGPA: 4.73/5.0 | Advisor: Dr. Mustapha Aminu | Thesis: A Mobile-Based Maize Disease Detection System Using YOLOv11 Model"
     },
     {
@@ -17,6 +18,7 @@ const SEED_DATA = {
       date: "Sep 2017 – Sep 2021",
       degree: "BSc Computer Science",
       institution: "Veritas University, Abuja, Nigeria",
+      url: "https://veritas.edu.ng",
       details: "CGPA: 4.56/5.0 | Advisor: Dr. Emmanuel Mkpojiogu | Thesis: Design and Implementation of an Online Proctoring Examination System"
     }
   ],
@@ -27,6 +29,7 @@ const SEED_DATA = {
       date: "Jan 2026 – Present",
       role: "Chief Technology Officer",
       institution: "efinsuite · Full-time · Remote — Winnipeg, Manitoba, Canada",
+      url: "https://efintax.biz/",
       details: "1. Leading the development, digitalization, and scaling of all digital applications and platforms of the Company.\n2. Designing, implementing, and overseeing the Company’s technology strategy and IT architecture.\n3. Managing and enhancing all IT systems, digital tools, software platforms, and integrations.\n4. Ensuring scalability, security, performance, and reliability of all digital and IT applications.\n5. Supporting innovation, automation, and the adoption of emerging technologies.\n6. Performing such other duties as may reasonably be assigned in line with the role of Chief Technology Officer."
     }
   ],
@@ -44,6 +47,7 @@ const SEED_DATA = {
       date: "2023 – Present",
       role: "Research Assistant",
       institution: "Veritas University, Abuja, Nigeria",
+      url: "https://veritas.edu.ng",
       details: "Research Areas: Computer Vision, Medical Imaging, Deep Learning for Disease Detection. Designed and implemented a Convolutional Neural Network (CNN) model for detecting malaria-infected cells and identifying maize streak virus. Investigated recent advancements in object detection, recognition, and tracking for embedded computer vision."
     },
     {
@@ -51,6 +55,7 @@ const SEED_DATA = {
       date: "2021 – 2024",
       role: "Undergraduate Researcher",
       institution: "Veritas University, Abuja, Nigeria",
+      url: "https://veritas.edu.ng",
       details: "Research Areas: Digital Forensics, Human-Computer Interaction, Online Assessment Systems. Developed an online proctoring examination system to ensure academic integrity in remote assessments."
     }
   ],

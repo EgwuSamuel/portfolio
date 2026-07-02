@@ -212,6 +212,14 @@
       document.getElementById('about-text').textContent = text;
     }
 
+    // Render institution name as a link when a url is present
+    function institutionHtml(item) {
+      const name = escapeHtml(item.institution);
+      return item.url
+        ? `<a href="${escapeHtml(item.url)}" target="_blank" rel="noopener">${name}</a>`
+        : name;
+    }
+
     function renderExperience() {
       const items = loadData('experience');
       const container = document.getElementById('experience-list');
@@ -219,7 +227,7 @@
         <div class="timeline-item">
           <div class="timeline-date">${escapeHtml(item.date)}</div>
           <h3>${escapeHtml(item.role)}</h3>
-          <p class="timeline-institution">${escapeHtml(item.institution)}</p>
+          <p class="timeline-institution">${institutionHtml(item)}</p>
           <p class="timeline-detail">${escapeHtml(item.details).replace(/\n/g, '<br>')}</p>
         </div>
       `).join('');
@@ -232,7 +240,7 @@
         <div class="timeline-item">
           <div class="timeline-date">${escapeHtml(item.date)}</div>
           <h3>${escapeHtml(item.degree)}</h3>
-          <p class="timeline-institution">${escapeHtml(item.institution)}</p>
+          <p class="timeline-institution">${institutionHtml(item)}</p>
           <p class="timeline-detail">${escapeHtml(item.details)}</p>
         </div>
       `).join('');
@@ -245,7 +253,7 @@
         <div class="timeline-item">
           <div class="timeline-date">${escapeHtml(item.date)}</div>
           <h3>${escapeHtml(item.role)}</h3>
-          <p class="timeline-institution">${escapeHtml(item.institution)}</p>
+          <p class="timeline-institution">${institutionHtml(item)}</p>
           <p class="timeline-detail">${escapeHtml(item.details)}</p>
         </div>
       `).join('');

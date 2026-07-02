@@ -86,6 +86,7 @@
           <div class="form-group"><label for="exp-date">Date Range</label><input type="text" id="exp-date" placeholder="e.g., Jan 2026 – Present"></div>
           <div class="form-group"><label for="exp-role">Role / Title</label><input type="text" id="exp-role" placeholder="e.g., Chief Technology Officer"></div>
           <div class="form-group"><label for="exp-institution">Company & Location</label><input type="text" id="exp-institution" placeholder="e.g., efinsuite · Full-time · Remote — Winnipeg, Canada"></div>
+          <div class="form-group"><label for="exp-url">Website URL (optional)</label><input type="text" id="exp-url" placeholder="https://..."></div>
           <div class="form-group"><label for="exp-details">Details / Responsibilities</label><textarea id="exp-details" rows="6" placeholder="One responsibility per line..."></textarea></div>
           <div class="form-actions">
             <button class="btn btn-primary" id="save-exp-btn">Save</button>
@@ -105,6 +106,7 @@
           <div class="form-group"><label for="edu-date">Date Range</label><input type="text" id="edu-date" placeholder="e.g., Oct 2023 – Apr 2025"></div>
           <div class="form-group"><label for="edu-degree">Degree</label><input type="text" id="edu-degree" placeholder="e.g., MSc Computer Science"></div>
           <div class="form-group"><label for="edu-institution">Institution</label><input type="text" id="edu-institution" placeholder="e.g., Veritas University, Abuja"></div>
+          <div class="form-group"><label for="edu-url">Website URL (optional)</label><input type="text" id="edu-url" placeholder="https://..."></div>
           <div class="form-group"><label for="edu-details">Details</label><textarea id="edu-details" rows="3" placeholder="CGPA, Advisor, Thesis..."></textarea></div>
           <div class="form-actions">
             <button class="btn btn-primary" id="save-edu-btn">Save</button>
@@ -124,6 +126,7 @@
           <div class="form-group"><label for="res-date">Date Range</label><input type="text" id="res-date" placeholder="e.g., Jan 2026 – Present"></div>
           <div class="form-group"><label for="res-role">Role</label><input type="text" id="res-role" placeholder="e.g., Research Assistant"></div>
           <div class="form-group"><label for="res-institution">Institution</label><input type="text" id="res-institution" placeholder="e.g., AIA4OneHealth"></div>
+          <div class="form-group"><label for="res-url">Website URL (optional)</label><input type="text" id="res-url" placeholder="https://..."></div>
           <div class="form-group"><label for="res-details">Details</label><textarea id="res-details" rows="3" placeholder="Research areas and description..."></textarea></div>
           <div class="form-actions">
             <button class="btn btn-primary" id="save-res-btn">Save</button>
@@ -364,9 +367,10 @@
     document.getElementById('save-edu-btn').addEventListener('click', () => {
       const date = document.getElementById('edu-date').value.trim(), degree = document.getElementById('edu-degree').value.trim();
       const institution = document.getElementById('edu-institution').value.trim(), details = document.getElementById('edu-details').value.trim();
+      const url = document.getElementById('edu-url').value.trim();
       const editId = document.getElementById('edu-edit-id').value;
       if (!date || !degree || !institution) { showToast('Date, Degree, and Institution are required.', 'error'); return; }
-      const entry = { id: editId || generateId(), date, degree, institution, details };
+      const entry = { id: editId || generateId(), date, degree, institution, url, details };
       let items = loadData('education');
       if (editId) { items = items.map(i => i.id === editId ? entry : i); } else { items.push(entry); }
       saveData('education', items); loadEducation(); resetEduForm(); showToast(editId ? 'Updated.' : 'Added.', 'success');
@@ -375,6 +379,7 @@
       const item = loadData('education').find(i => i.id === id); if (!item) return;
       document.getElementById('edu-edit-id').value = item.id; document.getElementById('edu-date').value = item.date;
       document.getElementById('edu-degree').value = item.degree; document.getElementById('edu-institution').value = item.institution;
+      document.getElementById('edu-url').value = item.url || '';
       document.getElementById('edu-details').value = item.details || '';
       document.getElementById('edu-form-title').textContent = 'Edit Education'; document.getElementById('cancel-edu-btn').style.display = 'inline-block';
       document.getElementById('edu-form').scrollIntoView({ behavior: 'smooth' });
@@ -382,6 +387,7 @@
     function resetEduForm() {
       document.getElementById('edu-edit-id').value = ''; document.getElementById('edu-date').value = '';
       document.getElementById('edu-degree').value = ''; document.getElementById('edu-institution').value = '';
+      document.getElementById('edu-url').value = '';
       document.getElementById('edu-details').value = ''; document.getElementById('edu-form-title').textContent = 'Add Education';
       document.getElementById('cancel-edu-btn').style.display = 'none';
     }
@@ -407,9 +413,10 @@
     document.getElementById('save-exp-btn').addEventListener('click', () => {
       const date = document.getElementById('exp-date').value.trim(), role = document.getElementById('exp-role').value.trim();
       const institution = document.getElementById('exp-institution').value.trim(), details = document.getElementById('exp-details').value.trim();
+      const url = document.getElementById('exp-url').value.trim();
       const editId = document.getElementById('exp-edit-id').value;
       if (!date || !role || !institution) { showToast('Date, Role, and Company are required.', 'error'); return; }
-      const entry = { id: editId || generateId(), date, role, institution, details };
+      const entry = { id: editId || generateId(), date, role, institution, url, details };
       let items = loadData('experience');
       if (editId) { items = items.map(i => i.id === editId ? entry : i); } else { items.push(entry); }
       saveData('experience', items); loadExperience(); resetExpForm(); showToast(editId ? 'Updated.' : 'Added.', 'success');
@@ -418,6 +425,7 @@
       const item = loadData('experience').find(i => i.id === id); if (!item) return;
       document.getElementById('exp-edit-id').value = item.id; document.getElementById('exp-date').value = item.date;
       document.getElementById('exp-role').value = item.role; document.getElementById('exp-institution').value = item.institution;
+      document.getElementById('exp-url').value = item.url || '';
       document.getElementById('exp-details').value = item.details || '';
       document.getElementById('exp-form-title').textContent = 'Edit Experience'; document.getElementById('cancel-exp-btn').style.display = 'inline-block';
       document.getElementById('exp-form').scrollIntoView({ behavior: 'smooth' });
@@ -425,6 +433,7 @@
     function resetExpForm() {
       document.getElementById('exp-edit-id').value = ''; document.getElementById('exp-date').value = '';
       document.getElementById('exp-role').value = ''; document.getElementById('exp-institution').value = '';
+      document.getElementById('exp-url').value = '';
       document.getElementById('exp-details').value = ''; document.getElementById('exp-form-title').textContent = 'Add Professional Experience';
       document.getElementById('cancel-exp-btn').style.display = 'none';
     }
@@ -450,9 +459,10 @@
     document.getElementById('save-res-btn').addEventListener('click', () => {
       const date = document.getElementById('res-date').value.trim(), role = document.getElementById('res-role').value.trim();
       const institution = document.getElementById('res-institution').value.trim(), details = document.getElementById('res-details').value.trim();
+      const url = document.getElementById('res-url').value.trim();
       const editId = document.getElementById('res-edit-id').value;
       if (!date || !role || !institution) { showToast('Date, Role, and Institution are required.', 'error'); return; }
-      const entry = { id: editId || generateId(), date, role, institution, details };
+      const entry = { id: editId || generateId(), date, role, institution, url, details };
       let items = loadData('research');
       if (editId) { items = items.map(i => i.id === editId ? entry : i); } else { items.push(entry); }
       saveData('research', items); loadResearch(); resetResForm(); showToast(editId ? 'Updated.' : 'Added.', 'success');
@@ -461,6 +471,7 @@
       const item = loadData('research').find(i => i.id === id); if (!item) return;
       document.getElementById('res-edit-id').value = item.id; document.getElementById('res-date').value = item.date;
       document.getElementById('res-role').value = item.role; document.getElementById('res-institution').value = item.institution;
+      document.getElementById('res-url').value = item.url || '';
       document.getElementById('res-details').value = item.details || '';
       document.getElementById('res-form-title').textContent = 'Edit Research'; document.getElementById('cancel-res-btn').style.display = 'inline-block';
       document.getElementById('res-form').scrollIntoView({ behavior: 'smooth' });
@@ -468,6 +479,7 @@
     function resetResForm() {
       document.getElementById('res-edit-id').value = ''; document.getElementById('res-date').value = '';
       document.getElementById('res-role').value = ''; document.getElementById('res-institution').value = '';
+      document.getElementById('res-url').value = '';
       document.getElementById('res-details').value = ''; document.getElementById('res-form-title').textContent = 'Add Research Experience';
       document.getElementById('cancel-res-btn').style.display = 'none';
     }
