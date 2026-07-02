@@ -31,6 +31,7 @@
       </div>
       <p class="login-error" id="login-error">Incorrect PIN. Please try again.</p>
       <button class="btn btn-primary" id="login-btn" style="width:100%;">Unlock</button>
+      <p class="forgot-pin"><a href="#" id="reset-pin-link">Forgot PIN?</a></p>
     </div>
   </div>
 
@@ -215,7 +216,7 @@
 
   <script>
     /* ===== Admin CMS Logic ===== */
-    const DEFAULT_PIN = '2026';
+    const DEFAULT_PIN = 'Fedal7777#';
 
     // --- Auth ---
     function getPin() {
@@ -247,6 +248,18 @@
       }
     });
     document.getElementById('pin-input').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('login-btn').click(); });
+
+    // --- Forgot PIN ---
+    document.getElementById('reset-pin-link').addEventListener('click', (e) => {
+      e.preventDefault();
+      if (confirm('Reset PIN to default? This will clear your custom PIN.')) {
+        localStorage.removeItem(STORAGE_KEYS.pin);
+        document.getElementById('pin-input').value = DEFAULT_PIN;
+        document.getElementById('login-error').classList.remove('visible');
+        showToast('PIN reset to default: ' + DEFAULT_PIN, 'success');
+      }
+    });
+
     document.getElementById('logout-btn').addEventListener('click', () => {
       document.getElementById('admin-dashboard').classList.remove('visible');
       document.getElementById('login-gate').classList.remove('hidden');
