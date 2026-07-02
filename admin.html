@@ -56,6 +56,7 @@
       <!-- Tab Navigation -->
       <div class="admin-tabs" id="admin-tabs">
         <button class="admin-tab active" data-tab="about">About</button>
+        <button class="admin-tab" data-tab="experience">Experience</button>
         <button class="admin-tab" data-tab="education">Education</button>
         <button class="admin-tab" data-tab="research">Research</button>
         <button class="admin-tab" data-tab="publications">Publications</button>
@@ -75,6 +76,25 @@
             <button class="btn btn-primary" id="save-about-btn">Save About</button>
           </div>
         </div>
+      </div>
+
+      <!-- ===== Experience Panel ===== -->
+      <div class="admin-panel" id="panel-experience">
+        <div class="post-form" id="exp-form">
+          <h3 id="exp-form-title">Add Professional Experience</h3>
+          <input type="hidden" id="exp-edit-id">
+          <div class="form-group"><label for="exp-date">Date Range</label><input type="text" id="exp-date" placeholder="e.g., Jan 2026 – Present"></div>
+          <div class="form-group"><label for="exp-role">Role / Title</label><input type="text" id="exp-role" placeholder="e.g., Chief Technology Officer"></div>
+          <div class="form-group"><label for="exp-institution">Company & Location</label><input type="text" id="exp-institution" placeholder="e.g., efinsuite · Full-time · Remote — Winnipeg, Canada"></div>
+          <div class="form-group"><label for="exp-details">Details / Responsibilities</label><textarea id="exp-details" rows="6" placeholder="One responsibility per line..."></textarea></div>
+          <div class="form-actions">
+            <button class="btn btn-primary" id="save-exp-btn">Save</button>
+            <button class="btn btn-outline" id="cancel-exp-btn" style="display:none;">Cancel</button>
+          </div>
+        </div>
+        <h3 style="margin:1.5rem 0 0.75rem;">All Experience Entries</h3>
+        <div class="admin-post-list" id="exp-list"></div>
+        <div id="exp-empty" style="text-align:center;padding:2rem 0;display:none;color:var(--text-muted);">No experience entries yet.</div>
       </div>
 
       <!-- ===== Education Panel ===== -->
@@ -367,6 +387,49 @@
     }
     document.getElementById('cancel-edu-btn').addEventListener('click', resetEduForm);
 
+    // ===== Experience =====
+    function loadExperience() {
+      const items = loadData('experience');
+      const renderFn = item => `
+        <div class="admin-post-item">
+          <div class="admin-post-info">
+            <h4>${escapeHtml(item.role)} — ${escapeHtml(item.institution)}</h4>
+            <div class="admin-post-meta"><span>${escapeHtml(item.date)}</span></div>
+          </div>
+          <div class="admin-post-actions">
+            <button class="btn btn-outline btn-sm" onclick="editExperience('${item.id}')">Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteItem('experience', loadData('experience'), '${item.id}', 'exp-list', 'exp-empty', expRenderFn)">Delete</button>
+          </div>
+        </div>`;
+      window.expRenderFn = renderFn;
+      renderItemList('exp-list', 'exp-empty', items, renderFn);
+    }
+    document.getElementById('save-exp-btn').addEventListener('click', () => {
+      const date = document.getElementById('exp-date').value.trim(), role = document.getElementById('exp-role').value.trim();
+      const institution = document.getElementById('exp-institution').value.trim(), details = document.getElementById('exp-details').value.trim();
+      const editId = document.getElementById('exp-edit-id').value;
+      if (!date || !role || !institution) { showToast('Date, Role, and Company are required.', 'error'); return; }
+      const entry = { id: editId || generateId(), date, role, institution, details };
+      let items = loadData('experience');
+      if (editId) { items = items.map(i => i.id === editId ? entry : i); } else { items.push(entry); }
+      saveData('experience', items); loadExperience(); resetExpForm(); showToast(editId ? 'Updated.' : 'Added.', 'success');
+    });
+    function editExperience(id) {
+      const item = loadData('experience').find(i => i.id === id); if (!item) return;
+      document.getElementById('exp-edit-id').value = item.id; document.getElementById('exp-date').value = item.date;
+      document.getElementById('exp-role').value = item.role; document.getElementById('exp-institution').value = item.institution;
+      document.getElementById('exp-details').value = item.details || '';
+      document.getElementById('exp-form-title').textContent = 'Edit Experience'; document.getElementById('cancel-exp-btn').style.display = 'inline-block';
+      document.getElementById('exp-form').scrollIntoView({ behavior: 'smooth' });
+    }
+    function resetExpForm() {
+      document.getElementById('exp-edit-id').value = ''; document.getElementById('exp-date').value = '';
+      document.getElementById('exp-role').value = ''; document.getElementById('exp-institution').value = '';
+      document.getElementById('exp-details').value = ''; document.getElementById('exp-form-title').textContent = 'Add Professional Experience';
+      document.getElementById('cancel-exp-btn').style.display = 'none';
+    }
+    document.getElementById('cancel-exp-btn').addEventListener('click', resetExpForm);
+
     // ===== Research =====
     function loadResearch() {
       const items = loadData('research');
@@ -551,6 +614,7 @@
     document.getElementById('export-btn').addEventListener('click', () => {
       const all = {
         about: loadData('about'),
+        experience: loadData('experience'),
         education: loadData('education'),
         research: loadData('research'),
         publications: loadData('publications'),
@@ -566,7 +630,7 @@
 
     // --- Load All Panels ---
     function loadAllPanels() {
-      loadAbout(); loadEducation(); loadResearch(); loadPublications(); loadAwards(); loadBlog();
+      loadAbout(); loadExperience(); loadEducation(); loadResearch(); loadPublications(); loadAwards(); loadBlog();
       document.getElementById('blog-date').value = new Date().toISOString().slice(0, 10);
     }
 

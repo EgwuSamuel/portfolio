@@ -21,6 +21,16 @@ const SEED_DATA = {
     }
   ],
 
+  experience: [
+    {
+      id: "exp-001",
+      date: "Jan 2026 – Present",
+      role: "Chief Technology Officer",
+      institution: "efinsuite · Full-time · Remote — Winnipeg, Manitoba, Canada",
+      details: "1. Leading the development, digitalization, and scaling of all digital applications and platforms of the Company.\n2. Designing, implementing, and overseeing the Company’s technology strategy and IT architecture.\n3. Managing and enhancing all IT systems, digital tools, software platforms, and integrations.\n4. Ensuring scalability, security, performance, and reliability of all digital and IT applications.\n5. Supporting innovation, automation, and the adoption of emerging technologies.\n6. Performing such other duties as may reasonably be assigned in line with the role of Chief Technology Officer."
+    }
+  ],
+
   research: [
     {
       id: "res-001",
@@ -138,6 +148,7 @@ const SEED_DATA = {
 // ===== Data helpers =====
 const STORAGE_KEYS = {
   about: 'portfolio_about',
+  experience: 'portfolio_experience',
   education: 'portfolio_education',
   research: 'portfolio_research',
   publications: 'portfolio_publications',
