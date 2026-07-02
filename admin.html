@@ -66,6 +66,7 @@
         <button class="admin-tab" data-tab="awards">Awards</button>
         <button class="admin-tab" data-tab="projects">Projects</button>
         <button class="admin-tab" data-tab="blog">Blog</button>
+        <button class="admin-tab" data-tab="analytics">Analytics</button>
       </div>
 
       <!-- ===== About Panel ===== -->
@@ -244,6 +245,27 @@
         <h3 style="margin:1.5rem 0 0.75rem;">All Blog Posts</h3>
         <div class="admin-post-list" id="blog-list"></div>
         <div id="blog-empty" style="text-align:center;padding:2rem 0;display:none;color:var(--text-muted);">No blog posts yet.</div>
+      </div>
+
+      <!-- ===== Analytics Panel ===== -->
+      <div class="admin-panel" id="panel-analytics">
+        <div class="post-form">
+          <h3>Site Visits — Worldwide</h3>
+          <p class="admin-subtitle" style="margin-bottom:1.25rem;">Total visits from all countries, counted live across every visitor to your public site.</p>
+          <div class="stat-grid">
+            <div class="stat-card">
+              <div class="stat-value" id="visit-count">—</div>
+              <div class="stat-label">Total Worldwide Visits</div>
+            </div>
+          </div>
+          <div class="form-actions" style="margin-top:1.5rem;">
+            <button class="btn btn-outline" id="refresh-visits-btn">&#8635; Refresh</button>
+            <a class="btn btn-primary" href="https://analytics.google.com/analytics/web/" target="_blank" rel="noopener">Open Google Analytics &#8599;</a>
+          </div>
+          <p style="margin-top:1.25rem;color:var(--text-muted);font-size:0.85rem;line-height:1.6;">
+            The number above is a live global counter of visits to your site. For a country-by-country breakdown and a live world map, open <strong>Google Analytics</strong> &rarr; <strong>Reports &rarr; Realtime</strong> or <strong>Reports &rarr; User &rarr; Demographics / Geographic</strong>. Your site already streams data there via Google Analytics.
+          </p>
+        </div>
       </div>
 
     </div>
@@ -780,9 +802,23 @@
       showToast('All data exported as JSON.', 'success');
     });
 
+    // --- Analytics: worldwide visit count ---
+    async function loadVisitCount() {
+      const el = document.getElementById('visit-count');
+      el.textContent = '…';
+      try {
+        const n = await getVisitCount();
+        el.textContent = n.toLocaleString();
+      } catch (e) {
+        el.textContent = 'Unavailable';
+      }
+    }
+    document.getElementById('refresh-visits-btn').addEventListener('click', loadVisitCount);
+
     // --- Load All Panels ---
     function loadAllPanels() {
       loadAbout(); loadExperience(); loadEducation(); loadResearch(); loadPublications(); loadAwards(); loadProjects(); loadBlog();
+      loadVisitCount();
       document.getElementById('blog-date').value = new Date().toISOString().slice(0, 10);
     }
 

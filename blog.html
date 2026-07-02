@@ -175,6 +175,7 @@
 
     // Initial render
     renderBlog();
+    trackVisit(); // record this visit in the global worldwide counter
 
     /* ===== Scroll Reveal ===== */
     const revealEls = document.querySelectorAll('.blog-card');

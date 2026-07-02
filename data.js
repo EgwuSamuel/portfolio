@@ -217,3 +217,35 @@ function escapeHtml(str) {
 function generateId() {
   return 'item-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
 }
+
+/* ===== Global visit counter (worldwide, no backend needed) ===== */
+const VISIT_COUNTER = {
+  base: 'https://abacus.jasoncameron.dev',
+  ns: 'egwusamuel-github-portfolio',
+  key: 'site-visits'
+};
+
+// Increment the global counter — call once per visit on public pages
+function bumpVisitCount() {
+  try {
+    fetch(`${VISIT_COUNTER.base}/hit/${VISIT_COUNTER.ns}/${VISIT_COUNTER.key}`, { cache: 'no-store' }).catch(() => {});
+  } catch (e) { /* offline / blocked — ignore */ }
+}
+
+// Count each visit at most once per browser session (refreshes don't inflate it)
+function trackVisit() {
+  try {
+    if (sessionStorage.getItem('sev_counted')) return;
+    sessionStorage.setItem('sev_counted', '1');
+  } catch (e) { /* private mode — still count */ }
+  bumpVisitCount();
+}
+
+// Read the global counter WITHOUT incrementing (used by the admin panel)
+async function getVisitCount() {
+  const res = await fetch(`${VISIT_COUNTER.base}/get/${VISIT_COUNTER.ns}/${VISIT_COUNTER.key}`, { cache: 'no-store' });
+  if (res.status === 404) return 0;          // key exists once first visit lands
+  if (!res.ok) throw new Error('counter unavailable');
+  const data = await res.json();
+  return typeof data.value === 'number' ? data.value : 0;
+}

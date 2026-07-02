@@ -355,6 +355,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', renderAll);
+    trackVisit(); // record this visit in the global worldwide counter
 
     /* ===== Scroll Reveal ===== */
     const revealEls = document.querySelectorAll('.section, .pub-card, .timeline-item, .award-item, .skill-category, .blog-card');
