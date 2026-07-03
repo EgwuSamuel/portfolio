@@ -176,6 +176,7 @@
     // Initial render
     renderBlog();
     trackVisit(); // record this visit in the global worldwide counter
+    initGoatCounter(); // per-country analytics (active once a site code is set)
 
     /* ===== Scroll Reveal ===== */
     const revealEls = document.querySelectorAll('.blog-card');

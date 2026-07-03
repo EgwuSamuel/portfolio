@@ -263,8 +263,13 @@
             <a class="btn btn-primary" href="https://analytics.google.com/analytics/web/" target="_blank" rel="noopener">Open Google Analytics &#8599;</a>
           </div>
           <p style="margin-top:1.25rem;color:var(--text-muted);font-size:0.85rem;line-height:1.6;">
-            The number above is a live global counter of visits to your site. For a country-by-country breakdown and a live world map, open <strong>Google Analytics</strong> &rarr; <strong>Reports &rarr; Realtime</strong> or <strong>Reports &rarr; User &rarr; Demographics / Geographic</strong>. Your site already streams data there via Google Analytics.
+            The number above is a live global counter of visits to your site. Your site also streams data to <strong>Google Analytics</strong> (Reports &rarr; Realtime / Geographic) for a full world map.
           </p>
+        </div>
+
+        <div class="post-form" style="margin-top:1.5rem;">
+          <h3>Views by Country</h3>
+          <div id="country-stats"></div>
         </div>
       </div>
 
@@ -815,10 +820,33 @@
     }
     document.getElementById('refresh-visits-btn').addEventListener('click', loadVisitCount);
 
+    // --- Analytics: per-country views (GoatCounter) ---
+    function loadCountryStats() {
+      const wrap = document.getElementById('country-stats');
+      if (!wrap) return;
+      if (!GOATCOUNTER_CODE) {
+        wrap.innerHTML = `
+          <div class="setup-note">
+            <p><strong>Country stats aren't connected yet.</strong> To show a live "Views by Country" panel right here:</p>
+            <ol>
+              <li>Create a free account at <a href="https://www.goatcounter.com/signup" target="_blank" rel="noopener">goatcounter.com/signup</a> and pick a site code.</li>
+              <li>In GoatCounter &rarr; <em>Settings &rarr; Site settings</em>, tick <em>“Allow anyone to view the statistics”</em> (public dashboard).</li>
+              <li>Give that site code to your developer to switch this panel on.</li>
+            </ol>
+          </div>`;
+        return;
+      }
+      const base = `https://${GOATCOUNTER_CODE}.goatcounter.com`;
+      wrap.innerHTML = `
+        <iframe class="country-frame" src="${base}/" loading="lazy" title="Views by country"></iframe>
+        <a class="btn btn-outline" href="${base}/" target="_blank" rel="noopener" style="margin-top:0.75rem;">Open full dashboard &#8599;</a>`;
+    }
+
     // --- Load All Panels ---
     function loadAllPanels() {
       loadAbout(); loadExperience(); loadEducation(); loadResearch(); loadPublications(); loadAwards(); loadProjects(); loadBlog();
       loadVisitCount();
+      loadCountryStats();
       document.getElementById('blog-date').value = new Date().toISOString().slice(0, 10);
     }
 

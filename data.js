@@ -241,6 +241,21 @@ function trackVisit() {
   bumpVisitCount();
 }
 
+/* ===== GoatCounter (per-country views) =====
+   Set this to your GoatCounter site code (e.g. 'egwusamuel' for egwusamuel.goatcounter.com).
+   Leave empty until you've signed up — the admin panel shows setup steps while it's blank. */
+const GOATCOUNTER_CODE = '';
+
+// Inject the GoatCounter tracker on public pages (no-op until the code is set)
+function initGoatCounter() {
+  if (!GOATCOUNTER_CODE) return;
+  const s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://gc.zgo.at/count.js';
+  s.setAttribute('data-goatcounter', `https://${GOATCOUNTER_CODE}.goatcounter.com/count`);
+  document.head.appendChild(s);
+}
+
 // Read the global counter WITHOUT incrementing (used by the admin panel)
 async function getVisitCount() {
   const res = await fetch(`${VISIT_COUNTER.base}/get/${VISIT_COUNTER.ns}/${VISIT_COUNTER.key}`, { cache: 'no-store' });

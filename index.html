@@ -356,6 +356,7 @@
 
     document.addEventListener('DOMContentLoaded', renderAll);
     trackVisit(); // record this visit in the global worldwide counter
+    initGoatCounter(); // per-country analytics (active once a site code is set)
 
     /* ===== Scroll Reveal ===== */
     const revealEls = document.querySelectorAll('.section, .pub-card, .timeline-item, .award-item, .skill-category, .blog-card');
