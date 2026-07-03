@@ -2,7 +2,7 @@
 /* Seed content loaded on first visit. Admin edits stored in localStorage override these. */
 
 const SEED_DATA = {
-  about: "I am a computer scientist and machine learning researcher dedicated to applying computational methods to pressing public health challenges. My work spans medical imaging—developing deep learning models for malaria and maize disease detection—and One Health surveillance, where I contribute to AI-driven systems for managing zoonotic diseases like Mpox. I serve as an Assistant Lecturer and Research Assistant at Veritas University, Abuja, while collaborating with the AIA4OneHealth lab on geospatial modeling and predictive analytics for disease transmission hotspots across Africa.",
+  about: "I am an AI researcher and software engineer working where machine learning meets real-world systems. My research focuses on computer vision and deep learning for medical imaging — building models for malaria and maize disease detection — and on AI-driven One Health surveillance for zoonotic diseases such as Mpox, in collaboration with the AIA4OneHealth lab. I also serve as an Assistant Lecturer and Research Assistant at Veritas University, Abuja.\n\nAs a software engineer and Chief Technology Officer at efinsuite, I lead the design and delivery of production platforms end to end. My flagship work is efinsuite Globe — an AI-powered, cloud-based financial management and accounting platform that unifies bookkeeping, payroll, tax compliance, and multi-currency reporting for global businesses. Across research and engineering, my goal is the same: turn rigorous AI into dependable tools people can actually use.",
 
   education: [
     {
