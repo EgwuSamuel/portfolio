@@ -12,12 +12,12 @@
 
 :root {
   /* Background layers */
-  --bg-deep: #060b1a;
-  --bg: #0a0f2c;
-  --bg-elevated: #0e1638;
-  --bg-card: #111d45;
-  --bg-card-hover: #162552;
-  --bg-glass: rgba(17, 29, 69, 0.65);
+  --bg-deep: #07090f;
+  --bg: #0b0e16;
+  --bg-elevated: #12141d;
+  --bg-card: #171a24;
+  --bg-card-hover: #1e2230;
+  --bg-glass: rgba(23, 26, 36, 0.65);
 
   /* Text */
   --text: #eceff8;
@@ -38,8 +38,8 @@
   --danger: #f87171;
 
   /* Borders */
-  --border: #1b3060;
-  --border-light: #243e78;
+  --border: #232733;
+  --border-light: #313644;
 
   /* Radii */
   --radius: 10px;
@@ -204,7 +204,7 @@ a:hover { color: var(--gold-light); }
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: rgba(10, 15, 44, 0.82);
+  background: rgba(11, 14, 22, 0.82);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border-bottom: 1px solid rgba(212,160,23,0.08);
@@ -398,7 +398,7 @@ a:hover { color: var(--gold-light); }
   border-radius: 50px;
   transition: all var(--transition);
   text-decoration: none;
-  background: rgba(17, 29, 69, 0.4);
+  background: rgba(23, 26, 36, 0.4);
   backdrop-filter: blur(6px);
 }
 
@@ -1706,7 +1706,7 @@ a:hover { color: var(--gold-light); }
     flex-direction: column;
     align-items: stretch;
     gap: 0;
-    background: rgba(10, 15, 44, 0.98);
+    background: rgba(11, 14, 22, 0.98);
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
     border: 1px solid var(--border);
