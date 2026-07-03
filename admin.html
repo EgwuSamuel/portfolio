@@ -820,26 +820,71 @@
     }
     document.getElementById('refresh-visits-btn').addEventListener('click', loadVisitCount);
 
-    // --- Analytics: per-country views (GoatCounter) ---
-    function loadCountryStats() {
+    // --- Analytics: per-country views (GoatCounter API -> native table) ---
+    function renderCountryTable(rows) {
+      if (!rows.length) {
+        return '<p style="color:var(--text-muted);">No country data yet — countries appear here once your live site gets its first visits.</p>';
+      }
+      rows.sort((a, b) => b.count - a.count);
+      const max = rows[0].count || 1;
+      const total = rows.reduce((s, r) => s + r.count, 0) || 1;
+      return '<div class="country-table">' + rows.map(r => {
+        const pct = Math.round((r.count / total) * 100);
+        const w = Math.max(3, Math.round((r.count / max) * 100));
+        return `<div class="country-row">
+          <span class="country-flag">${countryFlag(r.code)}</span>
+          <span class="country-name" title="${escapeHtml(r.name)}">${escapeHtml(r.name)}</span>
+          <span class="country-bar"><span class="country-bar-fill" style="width:${w}%"></span></span>
+          <span class="country-count">${r.count.toLocaleString()} <em>${pct}%</em></span>
+        </div>`;
+      }).join('') + '</div>';
+    }
+
+    async function loadCountryStats() {
       const wrap = document.getElementById('country-stats');
       if (!wrap) return;
+      const base = `https://${GOATCOUNTER_CODE}.goatcounter.com`;
+
       if (!GOATCOUNTER_CODE) {
-        wrap.innerHTML = `
-          <div class="setup-note">
-            <p><strong>Country stats aren't connected yet.</strong> To show a live "Views by Country" panel right here:</p>
-            <ol>
-              <li>Create a free account at <a href="https://www.goatcounter.com/signup" target="_blank" rel="noopener">goatcounter.com/signup</a> and pick a site code.</li>
-              <li>In GoatCounter &rarr; <em>Settings &rarr; Site settings</em>, tick <em>“Allow anyone to view the statistics”</em> (public dashboard).</li>
-              <li>Give that site code to your developer to switch this panel on.</li>
-            </ol>
-          </div>`;
+        wrap.innerHTML = `<div class="setup-note"><p><strong>Not connected yet.</strong> Sign up at <a href="https://www.goatcounter.com/signup" target="_blank" rel="noopener">goatcounter.com</a> and give your developer the site code.</p></div>`;
         return;
       }
-      const base = `https://${GOATCOUNTER_CODE}.goatcounter.com`;
-      wrap.innerHTML = `
-        <iframe class="country-frame" src="${base}/" loading="lazy" title="Views by country"></iframe>
-        <a class="btn btn-outline" href="${base}/" target="_blank" rel="noopener" style="margin-top:0.75rem;">Open full dashboard &#8599;</a>`;
+
+      const token = getGcToken();
+      if (!token) {
+        wrap.innerHTML = `
+          <div class="setup-note">
+            <p><strong>Show your country breakdown here.</strong> Paste a GoatCounter <em>read-only</em> API token — it's saved only in this browser and never uploaded:</p>
+            <div class="token-row">
+              <input type="password" id="gc-token-input" placeholder="Paste API token" autocomplete="off">
+              <button class="btn btn-primary btn-sm" id="save-gc-token-btn">Save</button>
+            </div>
+            <p style="margin-top:0.75rem;">Create one at <a href="${base}/user/api" target="_blank" rel="noopener">${GOATCOUNTER_CODE}.goatcounter.com &rarr; API</a> and tick <em>“Read statistics”</em> only. Meanwhile you can <a href="${base}/" target="_blank" rel="noopener">open the full dashboard &#8599;</a>.</p>
+          </div>`;
+        document.getElementById('save-gc-token-btn').addEventListener('click', () => {
+          const v = document.getElementById('gc-token-input').value.trim();
+          if (!v) { showToast('Enter a token first.', 'error'); return; }
+          saveGcToken(v); showToast('Token saved.', 'success'); loadCountryStats();
+        });
+        return;
+      }
+
+      wrap.innerHTML = '<p style="color:var(--text-muted);">Loading country stats…</p>';
+      try {
+        const rows = await fetchCountryStats(token);
+        wrap.innerHTML = renderCountryTable(rows) +
+          `<div class="form-actions" style="margin-top:1rem;">
+             <button class="btn btn-outline btn-sm" id="refresh-countries-btn">&#8635; Refresh</button>
+             <a class="btn btn-outline btn-sm" href="${base}/" target="_blank" rel="noopener">Full dashboard &#8599;</a>
+             <button class="btn btn-outline btn-sm" id="clear-gc-token-btn">Change token</button>
+           </div>`;
+        document.getElementById('refresh-countries-btn').addEventListener('click', loadCountryStats);
+        document.getElementById('clear-gc-token-btn').addEventListener('click', () => { saveGcToken(''); loadCountryStats(); });
+      } catch (e) {
+        wrap.innerHTML = `<div class="setup-note"><p><strong>Couldn't load country stats</strong> (${escapeHtml(String(e.message || e))}). The token may be wrong or missing the “Read statistics” permission. <a href="#" id="reset-gc-token">Re-enter token</a> &middot; <a href="${base}/" target="_blank" rel="noopener">Open dashboard &#8599;</a></p></div>`;
+        const r = document.getElementById('reset-gc-token');
+        if (r) r.addEventListener('click', (ev) => { ev.preventDefault(); saveGcToken(''); loadCountryStats(); });
+      }
     }
 
     // --- Load All Panels ---

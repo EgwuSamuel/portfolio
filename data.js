@@ -185,7 +185,8 @@ const STORAGE_KEYS = {
   awards: 'portfolio_awards',
   projects: 'portfolio_projects',
   blog: 'admin_posts',
-  pin: 'admin_pin'
+  pin: 'admin_pin',
+  gcToken: 'gc_api_token'
 };
 
 function loadData(key) {
@@ -254,6 +255,26 @@ function initGoatCounter() {
   s.src = 'https://gc.zgo.at/count.js';
   s.setAttribute('data-goatcounter', `https://${GOATCOUNTER_CODE}.goatcounter.com/count`);
   document.head.appendChild(s);
+}
+
+// GoatCounter read-only API token — stored per-browser (localStorage), never committed to the repo
+function getGcToken() { try { return (localStorage.getItem(STORAGE_KEYS.gcToken) || '').trim(); } catch (e) { return ''; } }
+function saveGcToken(t) { try { localStorage.setItem(STORAGE_KEYS.gcToken, (t || '').trim()); } catch (e) {} }
+
+// Fetch per-country view stats from GoatCounter (needs a read-only token)
+async function fetchCountryStats(token) {
+  const base = `https://${GOATCOUNTER_CODE}.goatcounter.com`;
+  const qs = new URLSearchParams({ start: '2024-01-01', end: new Date().toISOString().slice(0, 10), limit: '250' });
+  const res = await fetch(`${base}/api/v0/stats/locations?${qs}`, { headers: { Authorization: 'Bearer ' + token } });
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  const data = await res.json();
+  return (data.stats || []).map(s => ({ code: (s.id || '').toUpperCase(), name: s.name || s.id || 'Unknown', count: s.count || 0 }));
+}
+
+// Country ISO code -> flag emoji
+function countryFlag(code) {
+  if (!code || code.length !== 2) return '🏳️';
+  return code.toUpperCase().replace(/./g, c => String.fromCodePoint(127397 + c.charCodeAt(0)));
 }
 
 // Read the global counter WITHOUT incrementing (used by the admin panel)
