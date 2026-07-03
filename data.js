@@ -244,7 +244,7 @@ function trackVisit() {
 /* ===== GoatCounter (per-country views) =====
    Set this to your GoatCounter site code (e.g. 'egwusamuel' for egwusamuel.goatcounter.com).
    Leave empty until you've signed up — the admin panel shows setup steps while it's blank. */
-const GOATCOUNTER_CODE = '';
+const GOATCOUNTER_CODE = 'samuelegwu';
 
 // Inject the GoatCounter tracker on public pages (no-op until the code is set)
 function initGoatCounter() {
