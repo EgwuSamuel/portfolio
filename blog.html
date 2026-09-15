@@ -89,20 +89,18 @@
   <script>
     /* ===== Blog Logic ===== */
 
-    // Merge seed posts from posts.js with admin-added posts from localStorage
+    // Merge built-in seed posts with published posts from the backend (or local cache).
     function getAllPosts() {
       const seedPosts = typeof SEED_POSTS !== 'undefined' ? SEED_POSTS : [];
-      const stored = localStorage.getItem('admin_posts');
-      let adminPosts = [];
-      try {
-        adminPosts = stored ? JSON.parse(stored) : [];
-      } catch (e) {
-        adminPosts = [];
-      }
-      // Only show published posts from admin
-      const publishedAdmin = adminPosts.filter(p => p.status === 'published');
-      // Combine, sort by date descending
-      const all = [...seedPosts, ...publishedAdmin];
+      let blog = [];
+      try { const b = loadData('blog'); blog = Array.isArray(b) ? b : []; } catch (e) { blog = []; }
+      // Only show published posts (drafts stay hidden).
+      const publishedAdmin = blog.filter(p => p.status === 'published');
+      // Merge by id so an edited version of a seed post wins over the built-in copy.
+      const byId = new Map();
+      seedPosts.forEach(p => byId.set(p.id, p));
+      publishedAdmin.forEach(p => byId.set(p.id, p));
+      const all = [...byId.values()];
       all.sort((a, b) => new Date(b.date) - new Date(a.date));
       return all;
     }
@@ -184,8 +182,9 @@
       if (e.key === 'Escape') closeModal();
     });
 
-    // Initial render
+    // Initial render (seed/cache), then swap in live published content.
     renderBlog();
+    hydratePublished().then(ok => { if (ok) renderBlog(); });
     trackVisit(); // record this visit in the global worldwide counter
     initGoatCounter(); // per-country analytics (active once a site code is set)
 

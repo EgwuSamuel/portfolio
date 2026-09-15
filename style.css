@@ -1451,23 +1451,20 @@ a:hover { color: var(--gold-light); }
 
 .login-error.visible { display: block; }
 
-.forgot-pin {
+.login-note {
   margin-top: 1.15rem;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
+  line-height: 1.5;
   color: var(--text-muted);
+  text-align: left;
 }
 
-.forgot-pin a {
-  color: var(--text-muted);
-  text-decoration: none;
-  border-bottom: 1px dashed var(--text-muted);
-  transition: all var(--transition);
-  padding-bottom: 1px;
-}
-
-.forgot-pin a:hover {
-  color: var(--gold-light);
-  border-bottom-color: var(--gold-light);
+.login-note code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.72rem;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
 }
 
 /* Admin Dashboard */

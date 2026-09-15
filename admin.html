@@ -27,14 +27,14 @@
     <div class="login-box">
       <div class="login-icon">&#128274;</div>
       <h2>Admin Access</h2>
-      <p>Enter your PIN to manage portfolio content</p>
+      <p>Enter your password to manage portfolio content</p>
       <div class="form-group">
-        <label for="pin-input">PIN</label>
-        <input type="password" id="pin-input" placeholder="Enter PIN" autocomplete="off" maxlength="10">
+        <label for="pin-input">Password</label>
+        <input type="password" id="pin-input" placeholder="Enter password" autocomplete="current-password">
       </div>
-      <p class="login-error" id="login-error">Incorrect PIN. Please try again.</p>
+      <p class="login-error" id="login-error">Incorrect password. Please try again.</p>
       <button class="btn btn-primary" id="login-btn" style="width:100%;">Unlock</button>
-      <p class="forgot-pin"><a href="#" id="reset-pin-link">Forgot PIN?</a></p>
+      <p class="login-note" id="config-note" style="display:none;">The admin backend isn't configured yet. See <code>worker/README.md</code> to deploy it, then set <code>API_BASE</code> in <code>data.js</code>.</p>
     </div>
   </div>
 
@@ -45,7 +45,6 @@
     <nav class="admin-nav">
       <span class="admin-brand">Admin Panel</span>
       <div class="admin-actions">
-        <button class="btn btn-outline btn-sm" id="change-pin-btn">Change PIN</button>
         <button class="btn btn-outline btn-sm" id="export-btn">Export All JSON</button>
         <a href="index.html" class="btn btn-sm btn-outline" target="_blank">View Site &nearr;</a>
         <button class="btn btn-danger btn-sm" id="logout-btn">Logout</button>
@@ -54,7 +53,7 @@
 
     <div class="admin-container">
       <h2>Content Manager</h2>
-      <p class="admin-subtitle">Edit any section below. Changes save to your browser and appear on the live site instantly.</p>
+      <p class="admin-subtitle">Edit any section below. Changes are saved securely to the backend and publish to your live site.</p>
 
       <!-- Tab Navigation -->
       <div class="admin-tabs" id="admin-tabs">
@@ -276,31 +275,14 @@
     </div>
   </div>
 
-  <!-- Change PIN Modal -->
-  <div id="pin-modal" class="modal-overlay" style="display:none;">
-    <div class="modal-content">
-      <button class="modal-close" id="pin-modal-close">&times;</button>
-      <h2>Change PIN</h2>
-      <div class="form-group"><label for="new-pin">New PIN</label><input type="password" id="new-pin" placeholder="Enter new PIN" maxlength="10" autocomplete="off"></div>
-      <div class="form-group"><label for="confirm-pin">Confirm New PIN</label><input type="password" id="confirm-pin" placeholder="Confirm new PIN" maxlength="10" autocomplete="off"></div>
-      <p id="pin-modal-error" style="color:#f87171;font-size:0.8rem;display:none;margin-bottom:0.75rem;"></p>
-      <button class="btn btn-primary" id="save-pin-btn">Save PIN</button>
-    </div>
-  </div>
-
   <!-- Toast -->
   <div id="toast" class="toast" style="display:none;"></div>
 
   <script>
     /* ===== Admin CMS Logic ===== */
-    const DEFAULT_PIN = '20021996';
-
-    // --- Auth ---
-    function getPin() {
-      const saved = localStorage.getItem(STORAGE_KEYS.pin);
-      return (saved && saved.trim()) ? saved.trim() : DEFAULT_PIN;
-    }
-    function savePinToStorage(pin) { localStorage.setItem(STORAGE_KEYS.pin, pin); }
+    /* Authentication is handled by the backend (see data.js / worker/).
+       There is no password in this page — the server verifies it and returns a
+       short-lived session token, so there is nothing here to read or bypass. */
 
     // --- Toast ---
     function showToast(msg, type) {
@@ -309,56 +291,57 @@
       setTimeout(() => { t.style.display = 'none'; }, 3000);
     }
 
-    // --- Login ---
-    document.getElementById('login-btn').addEventListener('click', () => {
-      const input = document.getElementById('pin-input').value.trim();
-      if (input === getPin()) {
-        document.getElementById('login-gate').classList.add('hidden');
-        document.getElementById('admin-dashboard').classList.add('visible');
-        document.getElementById('login-error').classList.remove('visible');
-        document.getElementById('pin-input').value = '';
-        loadAllPanels();
-      } else {
-        document.getElementById('login-error').classList.add('visible');
-        document.getElementById('pin-input').value = '';
-        document.getElementById('pin-input').focus();
-      }
-    });
-    document.getElementById('pin-input').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('login-btn').click(); });
-
-    // --- Forgot PIN ---
-    document.getElementById('reset-pin-link').addEventListener('click', (e) => {
-      e.preventDefault();
-      if (confirm('Reset PIN to default? This will clear your custom PIN.')) {
-        localStorage.removeItem(STORAGE_KEYS.pin);
-        document.getElementById('pin-input').value = DEFAULT_PIN;
-        document.getElementById('login-error').classList.remove('visible');
-        showToast('PIN reset to default: ' + DEFAULT_PIN, 'success');
-      }
-    });
-
-    document.getElementById('logout-btn').addEventListener('click', () => {
+    // --- Login (server-verified) ---
+    function showDashboard() {
+      document.getElementById('login-gate').classList.add('hidden');
+      document.getElementById('admin-dashboard').classList.add('visible');
+      document.getElementById('login-error').classList.remove('visible');
+      document.getElementById('pin-input').value = '';
+    }
+    function showGate() {
       document.getElementById('admin-dashboard').classList.remove('visible');
       document.getElementById('login-gate').classList.remove('hidden');
       document.getElementById('pin-input').focus();
-    });
+    }
+    // Called by data.js if the backend rejects the session token mid-edit.
+    function onAuthExpired() {
+      showGate();
+      showToast('Session expired — please sign in again.', 'error');
+    }
 
-    // --- Pin Modal ---
-    document.getElementById('change-pin-btn').addEventListener('click', () => {
-      document.getElementById('pin-modal').style.display = 'flex';
-      document.getElementById('new-pin').value = ''; document.getElementById('confirm-pin').value = '';
-      document.getElementById('pin-modal-error').style.display = 'none';
-    });
-    document.getElementById('pin-modal-close').addEventListener('click', () => { document.getElementById('pin-modal').style.display = 'none'; });
-    document.getElementById('pin-modal').addEventListener('click', function(e) { if (e.target === this) this.style.display = 'none'; });
-    document.getElementById('save-pin-btn').addEventListener('click', () => {
-      const np = document.getElementById('new-pin').value.trim();
-      const cp = document.getElementById('confirm-pin').value.trim();
-      const err = document.getElementById('pin-modal-error');
-      if (!np || np.length < 3) { err.textContent = 'PIN must be at least 3 characters.'; err.style.display = 'block'; return; }
-      if (np !== cp) { err.textContent = 'PINs do not match.'; err.style.display = 'block'; return; }
-      savePinToStorage(np); document.getElementById('pin-modal').style.display = 'none';
-      showToast('PIN changed successfully.', 'success');
+    const loginBtn = document.getElementById('login-btn');
+    async function doLogin() {
+      const input = document.getElementById('pin-input').value;
+      if (!input) return;
+      if (!API_BASE) { document.getElementById('config-note').style.display = 'block'; return; }
+      loginBtn.disabled = true;
+      const prevLabel = loginBtn.textContent;
+      loginBtn.textContent = 'Checking…';
+      try {
+        const ok = await apiLogin(input);
+        if (ok) {
+          await hydratePublished();   // load current published content into the panels
+          showDashboard();
+          loadAllPanels();
+        } else {
+          document.getElementById('login-error').classList.add('visible');
+          document.getElementById('pin-input').value = '';
+          document.getElementById('pin-input').focus();
+        }
+      } catch (e) {
+        document.getElementById('config-note').style.display = 'block';
+      } finally {
+        loginBtn.disabled = false;
+        loginBtn.textContent = prevLabel;
+      }
+    }
+    loginBtn.addEventListener('click', doLogin);
+    document.getElementById('pin-input').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      setAuthToken('');
+      PUBLISHED = null;
+      showGate();
     });
 
     // --- Tabs ---
@@ -896,6 +879,7 @@
     }
 
     // --- Init ---
+    if (!API_BASE) document.getElementById('config-note').style.display = 'block';
     document.getElementById('pin-input').focus();
   </script>
 

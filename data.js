@@ -185,23 +185,128 @@ const STORAGE_KEYS = {
   awards: 'portfolio_awards',
   projects: 'portfolio_projects',
   blog: 'admin_posts',
-  pin: 'admin_pin',
   gcToken: 'gc_api_token'
 };
 
-function loadData(key) {
-  const raw = localStorage.getItem(STORAGE_KEYS[key]);
-  if (raw) {
-    try { return JSON.parse(raw); } catch(e) {}
-  }
+/* ===== Admin backend (Cloudflare Worker) =====
+   The admin editor is protected by a real server that verifies your password
+   and stores published content — the password is NEVER in this file or the page.
+
+   After deploying worker/ (see worker/README.md), paste your Worker URL below,
+   e.g.  const API_BASE = 'https://portfolio-admin.<your-subdomain>.workers.dev';
+
+   Leave it '' to run the site fully static from the seed data above; while it is
+   empty the admin editor stays locked (there is no client-side password to bypass). */
+const API_BASE = 'https://portfolio-admin.egwusamuel-dev.workers.dev';
+
+// The content keys the backend stores and the public pages render.
+const CONTENT_KEYS = ['about', 'experience', 'education', 'research', 'publications', 'awards', 'projects', 'blog'];
+
+// In-memory copy of the content published through the backend (null until loaded).
+let PUBLISHED = null;
+
+// Fresh deep copy of the built-in seed for a given key (used as the offline fallback).
+function seedFor(key) {
   if (key === 'about') return SEED_DATA.about;
-  if (key === 'blog') return SEED_DATA.blog;
+  if (key === 'blog') return JSON.parse(JSON.stringify(SEED_DATA.blog));
   const arr = SEED_DATA[key];
-  return arr ? [...arr] : [];
+  return arr ? JSON.parse(JSON.stringify(arr)) : [];
+}
+
+function loadData(key) {
+  // 1) Content published through the backend — shared and live for every visitor.
+  if (PUBLISHED && Object.prototype.hasOwnProperty.call(PUBLISHED, key) && PUBLISHED[key] != null) {
+    return PUBLISHED[key];
+  }
+  // 2) Local cache (offline / before hydrate completes).
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS[key]);
+    if (raw) return JSON.parse(raw);
+  } catch (e) {}
+  // 3) Built-in seed content.
+  return seedFor(key);
+}
+
+// Build a full content object from whatever we currently have (backend, cache, or seed).
+function currentContentSnapshot() {
+  const snap = {};
+  CONTENT_KEYS.forEach(k => { snap[k] = loadData(k); });
+  return snap;
 }
 
 function saveData(key, data) {
-  localStorage.setItem(STORAGE_KEYS[key], JSON.stringify(data));
+  if (!PUBLISHED) PUBLISHED = currentContentSnapshot();
+  PUBLISHED[key] = data;
+  // Keep a local cache so the editor still shows edits if a push is briefly offline.
+  try { localStorage.setItem(STORAGE_KEYS[key], JSON.stringify(data)); } catch (e) {}
+  // Persist to the backend (no-op unless configured AND authenticated).
+  pushContent();
+}
+
+// ===== Backend auth + sync =====
+// The session token lives in sessionStorage: it is cleared when the tab closes
+// and is only ever obtained from the server after a correct password.
+function getAuthToken() { try { return sessionStorage.getItem('admin_token') || ''; } catch (e) { return ''; } }
+function setAuthToken(t) {
+  try { if (t) sessionStorage.setItem('admin_token', t); else sessionStorage.removeItem('admin_token'); } catch (e) {}
+}
+
+// Read the published content from the backend (public, read-only).
+async function apiFetchContent() {
+  if (!API_BASE) return null;
+  try {
+    const res = await fetch(API_BASE + '/api/content', { cache: 'no-store' });
+    if (!res.ok) return null;
+    const json = await res.json();
+    return (json && json.data && typeof json.data === 'object') ? json.data : null;
+  } catch (e) { return null; }
+}
+
+// Load published content into PUBLISHED so pages/panels render it. Returns true on success.
+async function hydratePublished() {
+  const data = await apiFetchContent();
+  if (data) { PUBLISHED = data; return true; }
+  return false;
+}
+
+// Exchange a password for a session token. Returns true on success.
+async function apiLogin(password) {
+  if (!API_BASE) throw new Error('not-configured');
+  const res = await fetch(API_BASE + '/api/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password })
+  });
+  if (!res.ok) return false;
+  const json = await res.json().catch(() => null);
+  if (json && json.token) { setAuthToken(json.token); return true; }
+  return false;
+}
+
+// Push the whole content object to the backend. Only runs when authenticated.
+let _pushing = false, _pushAgain = false;
+async function pushContent() {
+  if (!API_BASE) return;              // static mode — nothing to push to
+  const token = getAuthToken();
+  if (!token) return;                 // not authenticated — local-only edit
+  if (_pushing) { _pushAgain = true; return; }
+  _pushing = true;
+  try {
+    const res = await fetch(API_BASE + '/api/content', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ data: PUBLISHED })
+    });
+    if (res.status === 401 || res.status === 403) {
+      setAuthToken('');
+      if (typeof onAuthExpired === 'function') onAuthExpired();
+    }
+  } catch (e) {
+    // Network hiccup: the local cache still holds the edit; it re-pushes on the next save.
+  } finally {
+    _pushing = false;
+    if (_pushAgain) { _pushAgain = false; pushContent(); }
+  }
 }
 
 function formatDateShort(dateStr) {

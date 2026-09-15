@@ -418,7 +418,10 @@
       renderAwards();
     }
 
-    document.addEventListener('DOMContentLoaded', renderAll);
+    document.addEventListener('DOMContentLoaded', () => {
+      renderAll();                                             // instant paint from seed/cache
+      hydratePublished().then(ok => { if (ok) renderAll(); }); // swap in live published content
+    });
     trackVisit(); // record this visit in the global worldwide counter
     initGoatCounter(); // per-country analytics (active once a site code is set)
 

@@ -1,0 +1,19 @@
+name = "portfolio-admin"
+main = "src/worker.js"
+compatibility_date = "2024-11-01"
+
+# --- Workers KV: stores your published portfolio content ---
+# Create the namespace once with:
+#   npx wrangler kv namespace create PORTFOLIO_KV
+# then paste the returned "id" value below (replace the placeholder).
+[[kv_namespaces]]
+binding = "PORTFOLIO_KV"
+id = "3829afdf692e4aa9982766ebe7fb2514"
+
+[vars]
+# The exact origin allowed to call this Worker — your live site. No trailing slash,
+# no path. For GitHub Pages on the default domain this is your username host:
+ALLOWED_ORIGIN = "https://egwusamuel.github.io"
+
+# NOTE: your password is NOT set here. It is a secret, set separately with:
+#   npx wrangler secret put ADMIN_PASSWORD
