@@ -1,8 +1,50 @@
 /* ===== Portfolio Data ===== */
-/* Seed content loaded on first visit. Admin edits stored in localStorage override these. */
+/* Seed content shipped with the site. Content published through the admin backend
+   overrides it; use "Sync from site files" in admin.html to push changes made here. */
 
 const SEED_DATA = {
-  about: "I am an AI researcher and software engineer working where machine learning meets real-world systems. My research focuses on computer vision and deep learning for medical imaging — building models for malaria and maize disease detection — and on AI-driven One Health surveillance for zoonotic diseases such as Mpox, in collaboration with the AIA4OneHealth lab. I also serve as an Assistant Lecturer and Research Assistant at Veritas University, Abuja.\n\nAs a software engineer and Chief Technology Officer at efinsuite, I lead the design and delivery of production platforms end to end. My flagship work is efinsuite Globe — an AI-powered, cloud-based financial management and accounting platform that unifies bookkeeping, payroll, tax compliance, and multi-currency reporting for global businesses. Across research and engineering, my goal is the same: turn rigorous AI into dependable tools people can actually use.",
+  about: "I am an AI researcher and Assistant Lecturer at Veritas University, Abuja, working on machine learning for public health. With the Artificial Intelligence for One Health initiative (AIA4OneHealth / AI4PEP Nigeria), I build geospatial and predictive models for zoonotic disease surveillance. Most recently, I developed an LGA-resolution mpox risk layer for Ogun State, published in Scientific African (2026) and integrated into the IDS-Master surveillance platform.\n\nMy earlier work applies computer vision and deep learning to medical and agricultural imaging: malaria-infected cell detection, mpox detection from skin-lesion images, and maize disease detection with YOLOv11 (my MSc thesis). I also bring industry engineering experience from serving as Chief Technology Officer at efinsuite in 2026. Across research and engineering, my aim is the same: rigorous, honestly evaluated AI that people can use.",
+
+  interests: [
+    "AI for One Health",
+    "Spatial epidemiology & disease mapping",
+    "Ensemble & ecological niche modelling",
+    "Computer vision for medical imaging",
+    "Trustworthy ML evaluation"
+  ],
+
+  news: [
+    {
+      id: "news-005",
+      date: "Oct 2026",
+      text: "Our paper on geospatial modelling of mpox transmission hotspots in Ogun State is published in Scientific African (Elsevier). I am the corresponding author.",
+      link: "https://doi.org/10.1016/j.sciaf.2026.e03698"
+    },
+    {
+      id: "news-004",
+      date: "Apr 2026",
+      text: "IDS-Master, Ogun State's first AI-powered infectious disease surveillance system, launched at the Public Health Emergency Operation Centre, Abeokuta. Our mpox risk layer is integrated into the platform.",
+      link: ""
+    },
+    {
+      id: "news-003",
+      date: "Jan 2026",
+      text: "Joined the AIA4OneHealth research initiative as a Research Assistant.",
+      link: "https://aia4onehealth.org/"
+    },
+    {
+      id: "news-002",
+      date: "2025",
+      text: "Presented our deep-learning mpox detection system at the AI4D 2025 conference.",
+      link: ""
+    },
+    {
+      id: "news-001",
+      date: "Apr 2025",
+      text: "Completed my MSc in Computer Science at Veritas University (CGPA 4.73/5.0).",
+      link: ""
+    }
+  ],
 
   education: [
     {
@@ -26,11 +68,11 @@ const SEED_DATA = {
   experience: [
     {
       id: "exp-001",
-      date: "Jan 2026 – Present",
+      date: "Jan 2026 – Sep 2026",
       role: "Chief Technology Officer",
       institution: "efinsuite · Full-time · Remote — Winnipeg, Manitoba, Canada",
       url: "https://efintax.biz/",
-      details: "1. Leading the development, digitalization, and scaling of all digital applications and platforms of the Company.\n2. Designing, implementing, and overseeing the Company’s technology strategy and IT architecture.\n3. Managing and enhancing all IT systems, digital tools, software platforms, and integrations.\n4. Ensuring scalability, security, performance, and reliability of all digital and IT applications.\n5. Supporting innovation, automation, and the adoption of emerging technologies.\n6. Performing such other duties as may reasonably be assigned in line with the role of Chief Technology Officer."
+      details: "1. Led the development, digitalization, and scaling of the company's digital applications and platforms, including efinsuite Globe, an AI-powered cloud accounting platform.\n2. Designed and oversaw the company's technology strategy and IT architecture.\n3. Managed IT systems, software platforms, and integrations, with a focus on scalability, security, performance, and reliability.\n4. Drove automation and the adoption of emerging technologies."
     }
   ],
 
@@ -41,7 +83,7 @@ const SEED_DATA = {
       role: "Research Assistant",
       institution: "AIA4OneHealth",
       url: "https://aia4onehealth.org/",
-      details: "Research Areas: AI for One Health, Zoonotic Disease Surveillance, Geospatial Modeling, Deep Learning for Public Health. Contributing to development of a machine learning-driven One Health system for managing zoonotic diseases. Conducting geospatial analysis and predictive modeling of Mpox transmission hotspots."
+      details: "Research Areas: AI for One Health, Zoonotic Disease Surveillance, Geospatial Modeling, Deep Learning for Public Health. Developed an LGA-resolution geospatial risk model for mpox in Ogun State using an ensemble of MaxEnt, Random Forest, and XGBoost with spatially blocked validation (published in Scientific African, 2026); the risk layer is integrated into the IDS-Master surveillance platform. Contributing to a machine learning-driven One Health system for managing zoonotic diseases."
     },
     {
       id: "res-002",
@@ -63,13 +105,33 @@ const SEED_DATA = {
 
   publications: [
     {
+      id: "pub-007",
+      venue: "Scientific African 2026",
+      title: "Geospatial Analysis and Predictive Modelling of Mpox Transmission Hotspots: A Case Study of Ogun State, Nigeria",
+      authors: "Sodiya, A. S., Egwu, S. O., Aborisade, D. O., Akinbowale, S., & Olasoju, M. I.",
+      journal: "Scientific African, 34 (2026), e03698. Elsevier.",
+      doi: "https://doi.org/10.1016/j.sciaf.2026.e03698",
+      status: "published",
+      year: 2026,
+      type: "journal",
+      featured: true,
+      corresponding: true,
+      openAccess: true,
+      code: "https://github.com/EgwuSamuel/geospatial_ogun",
+      summary: "An LGA-resolution mpox risk layer for the 20 LGAs of Ogun State, built with a MaxEnt, Random Forest, and XGBoost ensemble over 100 bootstrap replicates and reported under both random and spatially blocked validation. Seven LGAs were classified as high risk; the tiered layer was integrated into the IDS-Master surveillance platform.",
+      bib: { type: "article", journal: "Scientific African", volume: "34", pages: "e03698", publisher: "Elsevier" }
+    },
+    {
       id: "pub-001",
       venue: "AI4D 2025",
       title: "Mpox Detection System Using Deep Learning",
       authors: "Sodiya, A. S., Falana, O. J., Egwu, S. O., Imhonophi, G. B., Awodele, O., Aborisade, D. O., & Abdullahi, A.",
       journal: "PAIDeF Artificial Intelligence for Development (AI4D) Conference Proceedings, 2025",
       doi: "",
-      status: "published"
+      status: "published",
+      year: 2025,
+      type: "conference",
+      bib: { type: "inproceedings", booktitle: "PAIDeF Artificial Intelligence for Development (AI4D) Conference Proceedings" }
     },
     {
       id: "pub-002",
@@ -78,7 +140,10 @@ const SEED_DATA = {
       authors: "Egwu, S. O., Eseyin, J. B., Dako, A. D., & Izuafa, B. A.",
       journal: "International Journal of Research and Innovation in Applied Science (IJRIAS), 2024: 222–232",
       doi: "https://doi.org/10.51584/IJRIAS.2024.906020",
-      status: "published"
+      status: "published",
+      year: 2024,
+      type: "journal",
+      bib: { type: "article", journal: "International Journal of Research and Innovation in Applied Science", pages: "222--232" }
     },
     {
       id: "pub-003",
@@ -87,7 +152,10 @@ const SEED_DATA = {
       authors: "Ikegwu, A., Egwu, S. O., & Nnanna, O. C.",
       journal: "Proceedings of the International Conference on Technological Solutions for Smart Economy, Port Harcourt, Nigeria, 2024",
       doi: "",
-      status: "published"
+      status: "published",
+      year: 2024,
+      type: "conference",
+      bib: { type: "inproceedings", booktitle: "Proceedings of the International Conference on Technological Solutions for Smart Economy", address: "Port Harcourt, Nigeria" }
     },
     {
       id: "pub-004",
@@ -96,30 +164,15 @@ const SEED_DATA = {
       authors: "Jubrin, A. M., Adebayo, O. S., Philips, A., Joshua, A., & Egwu, S. O.",
       journal: "Proceedings of the 1st International Conference on Data Science and Engineering, Nigeria, 2021: 25–33",
       doi: "",
-      status: "published"
-    },
-    {
-      id: "pub-005",
-      venue: "",
-      title: "Mpox-HSAM: A Mpox Detection System Using Optimised Hybrid Deep Learning Model",
-      authors: "Sodiya, A. S., Aborisade, D. O., Egwu, S. O., Abdullahi, A., & Olasoju, M. I.",
-      journal: "Manuscript submitted to Scientific Reports, 2026",
-      doi: "",
-      status: "under-review"
+      status: "published",
+      year: 2021,
+      type: "conference",
+      bib: { type: "inproceedings", booktitle: "Proceedings of the 1st International Conference on Data Science and Engineering", address: "Nigeria", pages: "25--33" }
     },
     {
       id: "pub-006",
       venue: "",
       title: "A Machine Learning-Driven One Health System for Managing Zoonotic Diseases",
-      authors: "Contributing researcher — AIA4OneHealth",
-      journal: "",
-      doi: "",
-      status: "ongoing"
-    },
-    {
-      id: "pub-007",
-      venue: "",
-      title: "Geospatial Analysis and Predictive Modeling of Mpox Transmission Hotspots: A Case Study of Ogun State",
       authors: "Contributing researcher — AIA4OneHealth",
       journal: "",
       doi: "",
@@ -140,6 +193,13 @@ const SEED_DATA = {
   ],
 
   projects: [
+    {
+      id: "proj-004",
+      title: "Mpox Geospatial Risk Layer for Ogun State",
+      description: "LGA-resolution mpox risk mapping for the 20 LGAs of Ogun State using an ensemble of MaxEnt, Random Forest, and XGBoost with bootstrap uncertainty and spatially blocked cross-validation. The tiered risk layer was exported as GeoJSON with tier-specific action packages and integrated into the IDS-Master surveillance platform. Published in Scientific African (2026).",
+      link: "https://github.com/EgwuSamuel/geospatial_ogun",
+      images: []
+    },
     {
       id: "proj-001",
       title: "Maize Disease Detection System",
@@ -175,6 +235,14 @@ const SEED_DATA = {
   ]
 };
 
+/* Entries deleted from the site files. "Sync from site files" in admin.html removes
+   them from the published (backend) content too. */
+const SEED_SYNC = {
+  removed: {
+    publications: ["pub-005"]
+  }
+};
+
 // ===== Data helpers =====
 const STORAGE_KEYS = {
   about: 'portfolio_about',
@@ -184,6 +252,8 @@ const STORAGE_KEYS = {
   publications: 'portfolio_publications',
   awards: 'portfolio_awards',
   projects: 'portfolio_projects',
+  news: 'portfolio_news',
+  interests: 'portfolio_interests',
   blog: 'admin_posts',
   gcToken: 'gc_api_token'
 };
@@ -200,7 +270,7 @@ const STORAGE_KEYS = {
 const API_BASE = 'https://portfolio-admin.egwusamuel-dev.workers.dev';
 
 // The content keys the backend stores and the public pages render.
-const CONTENT_KEYS = ['about', 'experience', 'education', 'research', 'publications', 'awards', 'projects', 'blog'];
+const CONTENT_KEYS = ['about', 'interests', 'news', 'experience', 'education', 'research', 'publications', 'awards', 'projects', 'blog'];
 
 // In-memory copy of the content published through the backend (null until loaded).
 let PUBLISHED = null;
@@ -307,6 +377,66 @@ async function pushContent() {
     _pushing = false;
     if (_pushAgain) { _pushAgain = false; pushContent(); }
   }
+}
+
+// ===== Sync site files -> published content =====
+// Keys whose seed entries are merged into the published content by id.
+const SYNC_MERGE_KEYS = ['news', 'experience', 'education', 'research', 'publications', 'awards', 'projects'];
+// Keys replaced wholesale by the seed version.
+const SYNC_REPLACE_KEYS = ['about', 'interests'];
+
+// Pure function: returns the merged content plus a summary of what changed.
+// Seed entries win on matching ids; entries that exist only in the published
+// content (added through admin) are kept; ids listed in SEED_SYNC.removed are dropped.
+// The blog is left alone (blog.html already merges seed posts at render time).
+function computeSeedSync(published) {
+  const base = published && typeof published === 'object' ? JSON.parse(JSON.stringify(published)) : {};
+  const summary = { added: [], updated: [], removed: [], replaced: [] };
+  const removedMap = (typeof SEED_SYNC !== 'undefined' && SEED_SYNC.removed) || {};
+
+  SYNC_REPLACE_KEYS.forEach(key => {
+    const seed = seedFor(key);
+    if (JSON.stringify(base[key]) !== JSON.stringify(seed)) summary.replaced.push(key);
+    base[key] = seed;
+  });
+
+  SYNC_MERGE_KEYS.forEach(key => {
+    const seedItems = seedFor(key);
+    const current = Array.isArray(base[key]) ? base[key] : [];
+    const removedIds = new Set(removedMap[key] || []);
+    const currentById = new Map(current.map(i => [i && i.id, i]));
+    const seedIds = new Set(seedItems.map(i => i.id));
+
+    const merged = seedItems.map(item => {
+      const old = currentById.get(item.id);
+      // Keep images uploaded through admin when the site file has none.
+      if (old && Array.isArray(old.images) && old.images.length && !(item.images && item.images.length)) {
+        item = Object.assign({}, item, { images: old.images });
+      }
+      if (!old) summary.added.push(key + ': ' + (item.title || item.role || item.degree || item.name || item.text || item.id));
+      else if (JSON.stringify(old) !== JSON.stringify(item)) summary.updated.push(key + ': ' + (item.title || item.role || item.degree || item.name || item.text || item.id));
+      return item;
+    });
+    const adminOnly = current.filter(i => i && !seedIds.has(i.id) && !removedIds.has(i.id));
+    current.forEach(i => {
+      if (i && removedIds.has(i.id)) summary.removed.push(key + ': ' + (i.title || i.role || i.name || i.id));
+    });
+    base[key] = merged.concat(adminOnly);
+  });
+
+  return { data: base, summary };
+}
+
+// Allow only http(s), mailto and relative links in rendered hrefs.
+function safeUrl(url) {
+  const u = String(url || '').trim();
+  if (!u) return '';
+  if (/^(https?:|mailto:)/i.test(u) || /^[\w.\/#-]+$/.test(u)) return u;
+  return '';
+}
+function safeImgUrl(url) {
+  const u = String(url || '').trim();
+  return /^data:image\/(png|jpe?g|gif|webp);base64,/i.test(u) ? u : safeUrl(u);
 }
 
 function formatDateShort(dateStr) {

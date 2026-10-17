@@ -45,6 +45,7 @@
     <nav class="admin-nav">
       <span class="admin-brand">Admin Panel</span>
       <div class="admin-actions">
+        <button class="btn btn-primary btn-sm" id="sync-btn" title="Merge the latest content from data.js into the live site">Sync from site files</button>
         <button class="btn btn-outline btn-sm" id="export-btn">Export All JSON</button>
         <a href="index.html" class="btn btn-sm btn-outline" target="_blank">View Site &nearr;</a>
         <button class="btn btn-danger btn-sm" id="logout-btn">Logout</button>
@@ -157,6 +158,17 @@
           <div class="form-group"><label for="pub-authors">Authors</label><input type="text" id="pub-authors" placeholder="e.g., Egwu, S. O., Smith, J., ..."></div>
           <div class="form-group"><label for="pub-journal">Journal / Proceedings</label><input type="text" id="pub-journal"></div>
           <div class="form-group"><label for="pub-doi">DOI Link (optional)</label><input type="text" id="pub-doi" placeholder="https://doi.org/..."></div>
+          <div class="form-row">
+            <div class="form-group"><label for="pub-year">Year</label><input type="number" id="pub-year" min="1990" max="2100" placeholder="e.g., 2026"></div>
+            <div class="form-group"><label for="pub-type">Type</label>
+              <select id="pub-type"><option value="">—</option><option value="journal">Journal</option><option value="conference">Conference</option><option value="preprint">Preprint</option></select>
+            </div>
+          </div>
+          <div class="form-group"><label for="pub-code">Code Link (optional)</label><input type="text" id="pub-code" placeholder="https://github.com/..."></div>
+          <div class="form-row">
+            <div class="form-group"><label><input type="checkbox" id="pub-corresponding"> I am the corresponding author</label></div>
+            <div class="form-group"><label><input type="checkbox" id="pub-oa"> Open access</label></div>
+          </div>
           <div class="form-actions">
             <button class="btn btn-primary" id="save-pub-btn">Save</button>
             <button class="btn btn-outline" id="cancel-pub-btn" style="display:none;">Cancel</button>
@@ -548,9 +560,19 @@
       const doi = document.getElementById('pub-doi').value.trim(), status = document.getElementById('pub-status').value;
       const editId = document.getElementById('pub-edit-id').value;
       if (!title || !authors) { showToast('Title and Authors are required.', 'error'); return; }
-      const entry = { id: editId || generateId(), venue, title, authors, journal, doi, status };
+      const yearVal = parseInt(document.getElementById('pub-year').value, 10);
+      const entry = {
+        id: editId || generateId(), venue, title, authors, journal, doi, status,
+        year: Number.isFinite(yearVal) ? yearVal : undefined,
+        type: document.getElementById('pub-type').value || undefined,
+        code: document.getElementById('pub-code').value.trim(),
+        corresponding: document.getElementById('pub-corresponding').checked,
+        openAccess: document.getElementById('pub-oa').checked
+      };
       let items = loadData('publications');
-      if (editId) { items = items.map(i => i.id === editId ? entry : i); } else { items.push(entry); }
+      // Merge onto the existing entry so fields this form doesn't show (summary, bib, featured) survive.
+      if (editId) { items = items.map(i => i.id === editId ? JSON.parse(JSON.stringify(Object.assign({}, i, entry))) : i); }
+      else { items.push(JSON.parse(JSON.stringify(entry))); }
       saveData('publications', items); loadPublications(); resetPubForm(); showToast(editId ? 'Updated.' : 'Added.', 'success');
     });
     function editPublication(id) {
@@ -559,6 +581,9 @@
       document.getElementById('pub-title').value = item.title; document.getElementById('pub-authors').value = item.authors;
       document.getElementById('pub-journal').value = item.journal || ''; document.getElementById('pub-doi').value = item.doi || '';
       document.getElementById('pub-status').value = item.status;
+      document.getElementById('pub-year').value = item.year || ''; document.getElementById('pub-type').value = item.type || '';
+      document.getElementById('pub-code').value = item.code || '';
+      document.getElementById('pub-corresponding').checked = !!item.corresponding; document.getElementById('pub-oa').checked = !!item.openAccess;
       document.getElementById('pub-form-title').textContent = 'Edit Publication'; document.getElementById('cancel-pub-btn').style.display = 'inline-block';
       document.getElementById('pub-form').scrollIntoView({ behavior: 'smooth' });
     }
@@ -567,6 +592,8 @@
       document.getElementById('pub-title').value = ''; document.getElementById('pub-authors').value = '';
       document.getElementById('pub-journal').value = ''; document.getElementById('pub-doi').value = '';
       document.getElementById('pub-status').value = 'published'; document.getElementById('pub-form-title').textContent = 'Add Publication';
+      document.getElementById('pub-year').value = ''; document.getElementById('pub-type').value = ''; document.getElementById('pub-code').value = '';
+      document.getElementById('pub-corresponding').checked = false; document.getElementById('pub-oa').checked = false;
       document.getElementById('cancel-pub-btn').style.display = 'none';
     }
     document.getElementById('cancel-pub-btn').addEventListener('click', resetPubForm);
@@ -771,10 +798,51 @@
     }
     document.getElementById('cancel-blog-btn').addEventListener('click', resetBlogForm);
 
+    // --- Sync from site files (data.js -> backend) ---
+    document.getElementById('sync-btn').addEventListener('click', async () => {
+      const btn = document.getElementById('sync-btn');
+      const token = getAuthToken();
+      if (!API_BASE || !token) { showToast('Sign in first.', 'error'); return; }
+      btn.disabled = true;
+      try {
+        // Re-read the live content right now so nothing stale is pushed over it.
+        const res = await fetch(API_BASE + '/api/content', { cache: 'no-store' });
+        if (!res.ok) throw new Error('read failed');
+        const json = await res.json();
+        const live = (json && json.data && typeof json.data === 'object') ? json.data : currentContentSnapshot();
+        const { data, summary } = computeSeedSync(live);
+        const lines = [];
+        if (summary.added.length) lines.push('Add ' + summary.added.length + ':\n  ' + summary.added.join('\n  '));
+        if (summary.updated.length) lines.push('Update ' + summary.updated.length + ':\n  ' + summary.updated.join('\n  '));
+        if (summary.removed.length) lines.push('Remove ' + summary.removed.length + ':\n  ' + summary.removed.join('\n  '));
+        if (summary.replaced.length) lines.push('Replace: ' + summary.replaced.join(', '));
+        if (!lines.length) { showToast('Already in sync — nothing to change.', 'success'); return; }
+        if (!confirm('Sync from site files will:\n\n' + lines.join('\n\n') +
+          '\n\nEntries you added only in admin are kept. Continue?')) return;
+        const put = await fetch(API_BASE + '/api/content', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+          body: JSON.stringify({ data })
+        });
+        if (put.status === 401 || put.status === 403) { setAuthToken(''); onAuthExpired(); return; }
+        if (!put.ok) throw new Error('save failed');
+        PUBLISHED = data;
+        CONTENT_KEYS.forEach(k => { try { localStorage.setItem(STORAGE_KEYS[k], JSON.stringify(data[k])); } catch (e) {} });
+        loadAllPanels();
+        showToast('Synced. The live site updates within about a minute.', 'success');
+      } catch (e) {
+        showToast('Sync failed — nothing was changed. Check your connection and try again.', 'error');
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
     // --- Export All ---
     document.getElementById('export-btn').addEventListener('click', () => {
       const all = {
         about: loadData('about'),
+        interests: loadData('interests'),
+        news: loadData('news'),
         experience: loadData('experience'),
         education: loadData('education'),
         research: loadData('research'),
