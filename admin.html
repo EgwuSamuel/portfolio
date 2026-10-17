@@ -9,8 +9,8 @@
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="style.css">
-  <script src="data.js"></script>
+  <link rel="stylesheet" href="style.css?v=20261017b">
+  <script src="data.js?v=20261017b"></script>
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-796SDYQKFT"></script>
   <script>
@@ -300,7 +300,8 @@
     function showToast(msg, type) {
       const t = document.getElementById('toast');
       t.textContent = msg; t.className = 'toast ' + type; t.style.display = 'block';
-      setTimeout(() => { t.style.display = 'none'; }, 3000);
+      clearTimeout(showToast._h);
+      showToast._h = setTimeout(() => { t.style.display = 'none'; }, type === 'error' ? 8000 : 3000);
     }
 
     // --- Login (server-verified) ---
@@ -803,11 +804,16 @@
       const btn = document.getElementById('sync-btn');
       const token = getAuthToken();
       if (!API_BASE || !token) { showToast('Sign in first.', 'error'); return; }
+      if (typeof computeSeedSync !== 'function') {
+        showToast('Your browser is using an old copy of the site files. Press Ctrl+F5, sign in again, and retry.', 'error');
+        return;
+      }
       btn.disabled = true;
+      let stage = 'reading the live content';
       try {
         // Re-read the live content right now so nothing stale is pushed over it.
         const res = await fetch(API_BASE + '/api/content', { cache: 'no-store' });
-        if (!res.ok) throw new Error('read failed');
+        if (!res.ok) throw new Error('HTTP ' + res.status);
         const json = await res.json();
         const live = (json && json.data && typeof json.data === 'object') ? json.data : currentContentSnapshot();
         const { data, summary } = computeSeedSync(live);
@@ -815,23 +821,27 @@
         if (summary.added.length) lines.push('Add ' + summary.added.length + ':\n  ' + summary.added.join('\n  '));
         if (summary.updated.length) lines.push('Update ' + summary.updated.length + ':\n  ' + summary.updated.join('\n  '));
         if (summary.removed.length) lines.push('Remove ' + summary.removed.length + ':\n  ' + summary.removed.join('\n  '));
-        if (summary.replaced.length) lines.push('Replace: ' + summary.replaced.join(', '));
+        if (summary.replaced.length) lines.push('Replace with the site-file version: ' + summary.replaced.join(', ') +
+          (summary.replaced.includes('about') ? '\n  (your current About text will be overwritten; use Export All JSON first if you want a copy)' : ''));
         if (!lines.length) { showToast('Already in sync — nothing to change.', 'success'); return; }
         if (!confirm('Sync from site files will:\n\n' + lines.join('\n\n') +
           '\n\nEntries you added only in admin are kept. Continue?')) return;
+        stage = 'saving';
         const put = await fetch(API_BASE + '/api/content', {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
           body: JSON.stringify({ data })
         });
         if (put.status === 401 || put.status === 403) { setAuthToken(''); onAuthExpired(); return; }
-        if (!put.ok) throw new Error('save failed');
+        if (!put.ok) throw new Error('HTTP ' + put.status);
         PUBLISHED = data;
         CONTENT_KEYS.forEach(k => { try { localStorage.setItem(STORAGE_KEYS[k], JSON.stringify(data[k])); } catch (e) {} });
         loadAllPanels();
         showToast('Synced. The live site updates within about a minute.', 'success');
       } catch (e) {
-        showToast('Sync failed — nothing was changed. Check your connection and try again.', 'error');
+        console.error('Sync failed while ' + stage, e);
+        showToast('Sync failed while ' + stage + ' (' + (e && e.message ? e.message : e) + '). ' +
+          (stage === 'saving' ? 'The live site may not have changed; reload to check.' : 'Nothing was changed.'), 'error');
       } finally {
         btn.disabled = false;
       }
