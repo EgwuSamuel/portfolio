@@ -304,7 +304,7 @@ p { color: var(--text-2); text-wrap: pretty; }
 .news li:last-child { border-bottom: none; }
 .news-date { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); padding-top: 3px; white-space: nowrap; }
 .news-text { color: var(--text-2); font-size: 0.97rem; }
-.news li:first-child .news-date { color: var(--accent); font-weight: 500; }
+.news li.is-highlight .news-date { color: var(--accent); font-weight: 500; }
 .news-more { margin-top: 10px; background: none; border: none; color: var(--accent); font: inherit; font-size: 0.9rem; cursor: pointer; padding: 4px 0; }
 .news-more:hover { text-decoration: underline; }
 .news li.hidden-item { display: none; }

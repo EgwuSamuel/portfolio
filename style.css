@@ -1577,6 +1577,7 @@ a:hover { color: var(--gold-light); }
 }
 
 .post-form textarea { min-height: 150px; resize: vertical; }
+.post-form input[type="checkbox"] { width: auto; padding: 0; margin: 0 0.5rem 0 0; vertical-align: middle; accent-color: var(--gold); }
 
 .post-form .form-actions {
   display: flex;
@@ -1624,6 +1625,7 @@ a:hover { color: var(--gold-light); }
 .admin-post-meta span { margin-right: 1rem; }
 
 .admin-post-actions { display: flex; gap: 0.4rem; }
+.admin-post-actions .btn:disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
 
 /* Status badge */
 .status-badge {

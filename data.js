@@ -18,7 +18,8 @@ const SEED_DATA = {
       id: "news-005",
       date: "Oct 2026",
       text: "Our paper on geospatial modelling of mpox transmission hotspots in Ogun State is published in Scientific African (Elsevier). I am the corresponding author.",
-      link: "https://doi.org/10.1016/j.sciaf.2026.e03698"
+      link: "https://doi.org/10.1016/j.sciaf.2026.e03698",
+      highlight: true
     },
     {
       id: "news-004",
@@ -437,6 +438,40 @@ function safeUrl(url) {
 function safeImgUrl(url) {
   const u = String(url || '').trim();
   return /^data:image\/(png|jpe?g|gif|webp);base64,/i.test(u) ? u : safeUrl(u);
+}
+
+// ===== News dates =====
+// News dates are stored as display strings: "Oct 2026" (month + year) or "2025" (year only).
+const NEWS_MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+// "Oct 2026" -> { year: 2026, month: 10 }; "2025" -> { year: 2025, month: 0 }; unparseable -> null.
+function parseNewsDate(str) {
+  const s = String(str || '').trim();
+  const y = s.match(/\b(\d{4})\b/);
+  if (!y) return null;
+  const m = s.match(/\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?\b/i);
+  return { year: parseInt(y[1], 10), month: m ? NEWS_MONTHS.indexOf(m[1].charAt(0).toUpperCase() + m[1].slice(1, 3).toLowerCase()) + 1 : 0 };
+}
+function formatNewsDate(year, month) {
+  return month ? NEWS_MONTHS[month - 1] + ' ' + year : String(year);
+}
+// Larger = newer. A year-only item sorts above that year's dated items; unparseable dates sink to the bottom.
+function newsSortKey(item) {
+  const d = parseNewsDate(item && item.date);
+  return d ? d.year * 100 + (d.month || 13) : -1;
+}
+// Newest first. Items with the same date keep their stored order (that is what reordering in admin changes).
+function sortNewsNewestFirst(items) {
+  return (Array.isArray(items) ? items : [])
+    .map((item, i) => ({ item, i, k: newsSortKey(item) }))
+    .sort((a, b) => (b.k - a.k) || (a.i - b.i))
+    .map(x => x.item);
+}
+// Which items get the accent-coloured date. Content saved before the Highlight option existed
+// has no `highlight` field at all; it keeps the old look (newest item highlighted).
+function newsHighlightFlags(sortedItems) {
+  const legacy = !sortedItems.some(n => n && Object.prototype.hasOwnProperty.call(n, 'highlight'));
+  return sortedItems.map((n, i) => legacy ? i === 0 : !!(n && n.highlight));
 }
 
 function formatDateShort(dateStr) {

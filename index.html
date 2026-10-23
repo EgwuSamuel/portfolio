@@ -97,9 +97,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,500&display=swap">
-  <link rel="stylesheet" href="academic.css?v=20261017b">
+  <link rel="stylesheet" href="academic.css?v=20261023a">
   <link rel="preload" as="image" href="profile-480.jpg">
-  <script src="data.js?v=20261017b"></script>
+  <script src="data.js?v=20261023a"></script>
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-796SDYQKFT"></script>
   <script>
@@ -251,7 +251,7 @@
     <p>&copy; 2026 Samuel Onuche-Ojo Egwu &middot; Abuja, Nigeria</p>
   </footer>
 
-  <script src="site.js?v=20261017b"></script>
+  <script src="site.js?v=20261023a"></script>
   <script>
     // ===== Helpers =====
     // Escapes text for both element content and attribute values.
@@ -313,11 +313,12 @@
     }
 
     function renderNews() {
-      const items = loadData('news') || [];
+      const items = sortNewsNewestFirst(loadData('news'));
+      const highlight = newsHighlightFlags(items);
       const LIMIT = 5;
       const list = document.getElementById('news-list');
       list.innerHTML = items.map((n, i) => `
-        <li data-reveal class="${i >= LIMIT ? 'hidden-item' : ''}">
+        <li data-reveal class="${[i >= LIMIT ? 'hidden-item' : '', highlight[i] ? 'is-highlight' : ''].filter(Boolean).join(' ')}">
           <span class="news-date">${esc(n.date)}</span>
           <span class="news-text">${esc(n.text)}${safeUrl(n.link) ? ` ${extLink(n.link, 'Link&nbsp;&rarr;')}` : ''}</span>
         </li>`).join('');

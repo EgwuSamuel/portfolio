@@ -9,8 +9,8 @@
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="style.css?v=20261017b">
-  <script src="data.js?v=20261017b"></script>
+  <link rel="stylesheet" href="style.css?v=20261023a">
+  <script src="data.js?v=20261023a"></script>
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-796SDYQKFT"></script>
   <script>
@@ -59,6 +59,7 @@
       <!-- Tab Navigation -->
       <div class="admin-tabs" id="admin-tabs">
         <button class="admin-tab active" data-tab="about">About</button>
+        <button class="admin-tab" data-tab="news">News</button>
         <button class="admin-tab" data-tab="experience">Experience</button>
         <button class="admin-tab" data-tab="education">Education</button>
         <button class="admin-tab" data-tab="research">Research</button>
@@ -81,6 +82,31 @@
             <button class="btn btn-primary" id="save-about-btn">Save About</button>
           </div>
         </div>
+      </div>
+
+      <!-- ===== News Panel ===== -->
+      <div class="admin-panel" id="panel-news">
+        <div class="post-form" id="news-form">
+          <h3 id="news-form-title">Add News</h3>
+          <input type="hidden" id="news-edit-id">
+          <div class="form-row">
+            <div class="form-group"><label for="news-month">Month</label>
+              <select id="news-month"><option value="">— Year only —</option><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select>
+            </div>
+            <div class="form-group"><label for="news-year">Year</label><input type="number" id="news-year" min="1900" max="2100" step="1" placeholder="e.g., 2026"></div>
+          </div>
+          <div class="form-group"><label for="news-text">Text</label><textarea id="news-text" rows="3" placeholder="e.g., Our paper on ... is published in ..."></textarea></div>
+          <div class="form-group"><label for="news-link">Link URL (optional)</label><input type="text" id="news-link" placeholder="https://..."></div>
+          <div class="form-group"><label><input type="checkbox" id="news-highlight"> Highlight (show the date in the accent colour)</label></div>
+          <div class="form-actions">
+            <button class="btn btn-primary" id="save-news-btn">Save</button>
+            <button class="btn btn-outline" id="cancel-news-btn" style="display:none;">Cancel</button>
+          </div>
+        </div>
+        <h3 style="margin:1.5rem 0 0.25rem;">All News</h3>
+        <p class="admin-subtitle" style="margin-bottom:0.75rem;">Shown newest first, exactly as on the site. Use &uarr; / &darr; to reorder items that share the same date; to move an item further, change its date.</p>
+        <div class="admin-post-list" id="news-list"></div>
+        <div id="news-empty" style="text-align:center;padding:2rem 0;display:none;color:var(--text-muted);">No news yet.</div>
       </div>
 
       <!-- ===== Experience Panel ===== -->
@@ -380,7 +406,9 @@
       if (!confirm('Delete this item? This cannot be undone.')) return;
       const updated = items.filter(i => i.id !== id);
       saveData(key, updated);
-      loadPanelList(key, containerId, emptyId, renderFn);
+      const reload = { news: loadNews, experience: loadExperience, education: loadEducation, research: loadResearch,
+        publications: loadPublications, awards: loadAwards, projects: loadProjects, blog: loadBlog }[key];
+      if (reload) reload();
       showToast('Item deleted.', 'success');
     }
 
@@ -394,6 +422,108 @@
     function loadAbout() {
       document.getElementById('about-input').value = loadData('about');
     }
+
+    // ===== News =====
+    // Stored in the same content object as every other section (loadData/saveData -> backend).
+    // Older content has no `highlight` field; give every item an explicit value (newest item
+    // highlighted, as the site showed it) so editing one item can't silently drop the accent.
+    function getNewsItems() {
+      const items = (loadData('news') || []).slice();
+      if (items.length && !items.some(n => n && Object.prototype.hasOwnProperty.call(n, 'highlight'))) {
+        const flags = newsHighlightFlags(sortNewsNewestFirst(items));
+        const top = sortNewsNewestFirst(items).filter((n, i) => flags[i]);
+        return items.map(n => Object.assign({}, n, { highlight: top.includes(n) }));
+      }
+      return items;
+    }
+    function loadNews() {
+      const sorted = sortNewsNewestFirst(getNewsItems());
+      const container = document.getElementById('news-list');
+      const empty = document.getElementById('news-empty');
+      if (!sorted.length) { container.innerHTML = ''; empty.style.display = 'block'; return; }
+      empty.style.display = 'none';
+      container.innerHTML = sorted.map((n, i) => {
+        const key = newsSortKey(n);
+        const canUp = i > 0 && newsSortKey(sorted[i - 1]) === key;
+        const canDown = i < sorted.length - 1 && newsSortKey(sorted[i + 1]) === key;
+        const id = escapeHtml(n.id).replace(/"/g, '&quot;');
+        return `
+        <div class="admin-post-item" data-news-id="${id}">
+          <div class="admin-post-info">
+            <h4>${escapeHtml(n.text)}</h4>
+            <div class="admin-post-meta">
+              <span>${escapeHtml(n.date)}</span>
+              ${n.highlight ? '<span class="status-badge published">highlight</span>' : ''}
+              ${n.link ? '<span>has link</span>' : ''}
+            </div>
+          </div>
+          <div class="admin-post-actions">
+            <button class="btn btn-outline btn-sm" data-news-action="up" ${canUp ? '' : 'disabled'} title="Move up (same date only)" aria-label="Move up">&uarr;</button>
+            <button class="btn btn-outline btn-sm" data-news-action="down" ${canDown ? '' : 'disabled'} title="Move down (same date only)" aria-label="Move down">&darr;</button>
+            <button class="btn btn-outline btn-sm" data-news-action="edit">Edit</button>
+            <button class="btn btn-danger btn-sm" data-news-action="delete">Delete</button>
+          </div>
+        </div>`;
+      }).join('');
+    }
+    document.getElementById('news-list').addEventListener('click', e => {
+      const btn = e.target.closest('[data-news-action]');
+      if (!btn || btn.disabled) return;
+      const id = btn.closest('[data-news-id]').getAttribute('data-news-id');
+      const action = btn.getAttribute('data-news-action');
+      if (action === 'edit') { editNews(id); return; }
+      if (action === 'delete') { deleteItem('news', getNewsItems(), id, 'news-list', 'news-empty', null); return; }
+      // Reorder: swap with the neighbour shown above/below, only when both share a date
+      // (the site always sorts by date, so that is the only order that can change).
+      const items = getNewsItems();
+      const sorted = sortNewsNewestFirst(items);
+      const pos = sorted.findIndex(n => n.id === id);
+      const other = sorted[action === 'up' ? pos - 1 : pos + 1];
+      if (!other || newsSortKey(other) !== newsSortKey(sorted[pos])) return;
+      const a = items.findIndex(n => n.id === id), b = items.indexOf(other);
+      [items[a], items[b]] = [items[b], items[a]];
+      saveData('news', items); loadNews(); showToast('Order updated.', 'success');
+    });
+    document.getElementById('save-news-btn').addEventListener('click', () => {
+      const text = document.getElementById('news-text').value.trim();
+      const link = document.getElementById('news-link').value.trim();
+      const yearStr = document.getElementById('news-year').value.trim();
+      const month = parseInt(document.getElementById('news-month').value, 10) || 0;
+      const highlight = document.getElementById('news-highlight').checked;
+      const editId = document.getElementById('news-edit-id').value;
+      if (!text) { showToast('Text is required.', 'error'); return; }
+      if (!/^\d{4}$/.test(yearStr) || +yearStr < 1900 || +yearStr > 2100) { showToast('Enter a 4-digit year (e.g., 2026).', 'error'); return; }
+      if (link) {
+        let ok = /^https:\/\/\S+$/.test(link);
+        if (ok) { try { ok = new URL(link).protocol === 'https:'; } catch (err) { ok = false; } }
+        if (!ok) { showToast('Link URL must start with https://', 'error'); return; }
+      }
+      const entry = { id: editId || generateId(), date: formatNewsDate(parseInt(yearStr, 10), month), text, link, highlight };
+      let items = getNewsItems();
+      // Merge onto the existing entry so any extra fields survive; new items go first among same-date items.
+      if (editId) { items = items.map(i => i.id === editId ? Object.assign({}, i, entry) : i); }
+      else { items.unshift(entry); }
+      saveData('news', items); loadNews(); resetNewsForm(); showToast(editId ? 'Updated.' : 'Added.', 'success');
+    });
+    function editNews(id) {
+      const item = getNewsItems().find(i => i.id === id); if (!item) return;
+      const d = parseNewsDate(item.date);
+      document.getElementById('news-edit-id').value = item.id;
+      document.getElementById('news-month').value = d && d.month ? String(d.month) : '';
+      document.getElementById('news-year').value = d ? d.year : '';
+      document.getElementById('news-text').value = item.text || '';
+      document.getElementById('news-link').value = item.link || '';
+      document.getElementById('news-highlight').checked = !!item.highlight;
+      document.getElementById('news-form-title').textContent = 'Edit News'; document.getElementById('cancel-news-btn').style.display = 'inline-block';
+      document.getElementById('news-form').scrollIntoView({ behavior: 'smooth' });
+    }
+    function resetNewsForm() {
+      document.getElementById('news-edit-id').value = ''; document.getElementById('news-month').value = '';
+      document.getElementById('news-year').value = ''; document.getElementById('news-text').value = '';
+      document.getElementById('news-link').value = ''; document.getElementById('news-highlight').checked = false;
+      document.getElementById('news-form-title').textContent = 'Add News'; document.getElementById('cancel-news-btn').style.display = 'none';
+    }
+    document.getElementById('cancel-news-btn').addEventListener('click', resetNewsForm);
 
     // ===== Education =====
     function loadEducation() {
@@ -950,7 +1080,7 @@
 
     // --- Load All Panels ---
     function loadAllPanels() {
-      loadAbout(); loadExperience(); loadEducation(); loadResearch(); loadPublications(); loadAwards(); loadProjects(); loadBlog();
+      loadAbout(); loadNews(); loadExperience(); loadEducation(); loadResearch(); loadPublications(); loadAwards(); loadProjects(); loadBlog();
       loadVisitCount();
       loadCountryStats();
       document.getElementById('blog-date').value = new Date().toISOString().slice(0, 10);
